@@ -1,0 +1,13 @@
+name: test
+on:
+  push:
+    branches-ignore:
+      - 'save*'
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: yarn test-release
