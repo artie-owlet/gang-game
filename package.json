@@ -21,6 +21,7 @@
   },
   "packageManager": "yarn@4.3.1",
   "devDependencies": {
+    "@artie-owlet/chifir": "^2.0.0",
     "@eslint/js": "^8",
     "@stylistic/eslint-plugin": "^2.3.0",
     "@types/mocha": "^10.0.6",

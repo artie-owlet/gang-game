@@ -5,10 +5,18 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@artie-owlet/chifir@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@artie-owlet/chifir@npm:2.0.0"
+  checksum: 10c0/b98131752d85aadf2f2c3f72e1a4d84c8a1a245871b6f339cfac3c54dbb9d78dd32fe59acf28bae0f6cf464fd6023f63935abfeb814c375efdb2a448dcfebe38
+  languageName: node
+  linkType: hard
+
 "@artie-owlet/gang-game@workspace:.":
   version: 0.0.0-use.local
   resolution: "@artie-owlet/gang-game@workspace:."
   dependencies:
+    "@artie-owlet/chifir": "npm:^2.0.0"
     "@eslint/js": "npm:^8"
     "@stylistic/eslint-plugin": "npm:^2.3.0"
     "@types/mocha": "npm:^10.0.6"
