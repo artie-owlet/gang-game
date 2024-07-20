@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { barBuildingTypeSchema } from './bar-building-config';
+import { barBuildingTypeSchema } from '../rules/bar-building-config';
 import { emptyBuildingDataSchema } from './empty-building-data';
 import { personIdSchema } from './person-data';
 

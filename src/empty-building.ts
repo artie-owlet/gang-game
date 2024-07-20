@@ -1,6 +1,6 @@
-import { isEmptyBuildingData, type EmptyBuildingData, type BuildingId } from './data/empty-building-data';
 import type { GameContext } from './game-context';
 import { ResourceStorage } from './resource-storage';
+import { isEmptyBuildingData, type EmptyBuildingData, type BuildingId } from './schema/data/empty-building-data';
 import { generateId } from './utils/random';
 import { Wallet } from './wallet';
 

@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { defineFlavoredStringSchema } from '../../utils/flavored-string';
 import { tradeItemDataSchema } from './trade-item-data';
 
 export const traderIdSchema = defineFlavoredStringSchema('TradeBuildingId');

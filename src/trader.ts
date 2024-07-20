@@ -1,6 +1,6 @@
-import type { ResourceType } from './data/resource-config';
-import { isTraderData, type TraderData, type TraderId } from './data/trader-data';
 import type { GameContext } from './game-context';
+import { isTraderData, type TraderData, type TraderId } from './schema/data/trader-data';
+import type { ResourceType } from './schema/rules/resource-config';
 import { TradeItem } from './trade-item';
 import { generateId } from './utils/random';
 

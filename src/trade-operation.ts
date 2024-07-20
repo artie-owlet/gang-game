@@ -1,5 +1,5 @@
-import type { ResourceType } from './data/resource-config';
 import type { GameContext } from './game-context';
+import type { ResourceType } from './schema/rules/resource-config';
 import type { TradeItem } from './trade-item';
 import type { Trader } from './trader';
 import type { OccupiedVehicle } from './vehicle';

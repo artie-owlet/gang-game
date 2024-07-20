@@ -1,12 +1,12 @@
+import { EmptyBuilding } from './empty-building';
+import type { GameContext } from './game-context';
+import type { Person } from './person';
+import { isProductionBuildingData, type ProductionBuildingData } from './schema/data/production-building-data';
 import type {
     ProductionBuildingConfig,
     ProductionBuildingType,
     ProductionReceipe,
-} from './data/production-building-config';
-import { isProductionBuildingData, type ProductionBuildingData } from './data/production-building-data';
-import { EmptyBuilding } from './empty-building';
-import type { GameContext } from './game-context';
-import type { Person } from './person';
+} from './schema/rules/production-building-config';
 
 type CtorArgs = [ProductionBuildingData, GameContext] | [
     building: EmptyBuilding,

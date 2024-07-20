@@ -1,9 +1,9 @@
-import type { Direction } from './data/direction';
-import type { VehicleType } from './data/vehicle-confg';
-import { isVehicleData, type VehicleData, type VehicleId } from './data/vehicle-data';
 import type { GameContext } from './game-context';
 import type { Person } from './person';
 import { ResourceStorage } from './resource-storage';
+import { isVehicleData, type VehicleData, type VehicleId } from './schema/data/vehicle-data';
+import type { VehicleType } from './schema/rules/vehicle-confg';
+import type { Direction } from './schema/utils/direction';
 import { generateId } from './utils/random';
 import { Wallet } from './wallet';
 

@@ -1,5 +1,5 @@
-import { isCornerData, type CornerData } from './data/corner-data';
 import type { GameContext } from './game-context';
+import { isCornerData, type CornerData } from './schema/data/corner-data';
 
 type CtorArgs = [CornerData] | [
     game: GameContext,

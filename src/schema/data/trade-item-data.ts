@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { resourceTypeSchema } from './resource-config';
+import { resourceTypeSchema } from '../rules/resource-config';
 
 export const tradeItemDataSchema = ss.object({
     resourceType: resourceTypeSchema,

@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-import type { WeightedSet } from '../data/weighted-set';
+import type { WeightedSet } from '../schema/utils/weighted-set';
 import type { FlavoredString } from './flavored-string';
 
 export interface Randomizer {

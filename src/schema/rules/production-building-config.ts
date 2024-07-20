@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { defineFlavoredStringSchema } from '../../utils/flavored-string';
 import { resourceTypeSchema } from './resource-config';
 
 export const productionBuildingTypeSchema = defineFlavoredStringSchema('ProductionBuildingType');

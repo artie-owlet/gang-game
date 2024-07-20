@@ -1,5 +1,5 @@
-import { isPersonData, type PersonData, type PersonId } from './data/person-data';
 import type { GameContext } from './game-context';
+import { isPersonData, type PersonData, type PersonId } from './schema/data/person-data';
 import { generateId } from './utils/random';
 
 type CtorArgs = [PersonData] | [

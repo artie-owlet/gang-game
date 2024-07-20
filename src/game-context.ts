@@ -1,16 +1,16 @@
 import type { City } from './city';
-import type { BarBuildingConfig, BarBuildingType } from './data/bar-building-config';
-import type { GeneralConfig } from './data/general-config-data';
-import type { PersonId } from './data/person-data';
+import type { Person } from './person';
+import type { PersonId } from './schema/data/person-data';
+import type { VehicleId } from './schema/data/vehicle-data';
+import type { BarBuildingConfig, BarBuildingType } from './schema/rules/bar-building-config';
+import type { GeneralConfig } from './schema/rules/general-config';
 import type {
     ProductionBuildingConfig,
     ProductionBuildingType,
     ProductionReceipe,
-} from './data/production-building-config';
-import type { ResourceConfig, ResourceType } from './data/resource-config';
-import type { VehicleConfig, VehicleType } from './data/vehicle-confg';
-import type { VehicleId } from './data/vehicle-data';
-import type { Person } from './person';
+} from './schema/rules/production-building-config';
+import type { ResourceConfig, ResourceType } from './schema/rules/resource-config';
+import type { VehicleConfig, VehicleType } from './schema/rules/vehicle-confg';
 import type { Randomizer } from './utils/random';
 import type { Vehicle } from './vehicle';
 

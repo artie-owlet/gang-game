@@ -1,6 +1,6 @@
-import type { ResourceType } from './data/resource-config';
-import { isTradeItemData, type TradeItemData } from './data/trade-item-data';
 import type { GameContext } from './game-context';
+import { isTradeItemData, type TradeItemData } from './schema/data/trade-item-data';
+import type { ResourceType } from './schema/rules/resource-config';
 import { randomFromSet } from './utils/random';
 
 type CtorArgs = [TradeItemData] | [

@@ -1,8 +1,8 @@
-import type { BarBuildingConfig, BarBuildingType } from './data/bar-building-config';
-import { isBarBuildingData, type BarBuildingData } from './data/bar-building-data';
 import { EmptyBuilding } from './empty-building';
 import type { GameContext } from './game-context';
 import type { Person } from './person';
+import { isBarBuildingData, type BarBuildingData } from './schema/data/bar-building-data';
+import type { BarBuildingConfig, BarBuildingType } from './schema/rules/bar-building-config';
 
 type CtorArgs = [BarBuildingData, GameContext] | [
     building: EmptyBuilding,

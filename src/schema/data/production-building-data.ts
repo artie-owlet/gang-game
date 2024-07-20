@@ -1,8 +1,8 @@
 import ss from 'superstruct';
 
+import { productionReceipeSchema, productionBuildingTypeSchema } from '../rules/production-building-config';
 import { emptyBuildingDataSchema } from './empty-building-data';
 import { personIdSchema } from './person-data';
-import { productionReceipeSchema, productionBuildingTypeSchema } from './production-building-config';
 
 export const productionBuildingDataSchema = ss.intersection([
     emptyBuildingDataSchema,

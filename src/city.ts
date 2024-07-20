@@ -1,7 +1,7 @@
 import { Corner } from './corner';
-import { isCityData, type CityData } from './data/city-data';
-import { Direction } from './data/direction';
 import { generateStreetMap, type CornerBorders } from './generators/generate-street-map';
+import { isCityData, type CityData } from './schema/data/city-data';
+import { Direction } from './schema/utils/direction';
 import type { Randomizer } from './utils/random';
 
 interface Route {

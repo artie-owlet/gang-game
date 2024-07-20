@@ -1,10 +1,10 @@
 import ss from 'superstruct';
 
-import { defineFlavoredStringSchema } from '../utils/flavored-string';
-import { directionSchema } from './direction';
+import { defineFlavoredStringSchema } from '../../utils/flavored-string';
+import { vehicleTypeSchema } from '../rules/vehicle-confg';
+import { directionSchema } from '../utils/direction';
 import { personIdSchema } from './person-data';
 import { resourceStorageSchema } from './resource-storage-data';
-import { vehicleTypeSchema } from './vehicle-confg';
 
 export const vehicleIdSchema = defineFlavoredStringSchema('VehicleId');
 

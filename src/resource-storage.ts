@@ -1,10 +1,10 @@
-import type { ResourceType } from './data/resource-config';
+import type { GameContext } from './game-context';
 import {
     isResourceStorageData,
     type ResourceStorageData,
     type ResourceStorageItem,
-} from './data/resource-storage-data';
-import type { GameContext } from './game-context';
+} from './schema/data/resource-storage-data';
+import type { ResourceType } from './schema/rules/resource-config';
 
 type CtorArgs = [ResourceStorageData, GameContext] | [
     capacity: number,
