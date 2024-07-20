@@ -1,9 +1,8 @@
 name: build
 on:
-  push:
-    branches-ignore:
-      - 'save*'
   pull_request:
+    branches:
+    - master
 jobs:
   build:
     runs-on: ubuntu-latest
