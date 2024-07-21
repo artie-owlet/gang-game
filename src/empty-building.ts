@@ -40,9 +40,9 @@ export class EmptyBuilding {
         } else {
             const [game] = args;
             this.id = generateId();
-            this.name = game.randomBuildingName();
+            this.name = game.randomizer.randomBuildingName();
             this.wallet = new Wallet(0);
-            this.storage = new ResourceStorage(game.generalConfig.buildingCapacity, game);
+            this.storage = new ResourceStorage(game.rules.generalConfig.buildingCapacity, game);
         }
     }
 }

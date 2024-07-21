@@ -2,7 +2,7 @@ import { Corner } from './corner';
 import { generateStreetMap, type CornerBorders } from './generators/generate-street-map';
 import { isCityData, type CityData } from './schema/data/city-data';
 import { Direction } from './schema/utils/direction';
-import type { Randomizer } from './utils/random';
+import type { Rng } from './utils/random';
 
 interface Route {
     path: number[];
@@ -30,7 +30,7 @@ function reduceRoutes(routes: Route[]): Route[] {
 type CtorArgs = [CityData] | [
     size: number,
     corners: Corner[],
-    rand: Randomizer,
+    rand: Rng,
 ];
 
 function isLoadCtorArgs(args: CtorArgs): args is [CityData] {

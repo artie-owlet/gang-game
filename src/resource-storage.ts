@@ -102,6 +102,6 @@ export class ResourceStorage {
     }
 
     private getResourceUnitSize(resourceType: ResourceType): number {
-        return this.game.resourceConfig(resourceType).size;
+        return this.game.rules.resourceConfig(resourceType).size;
     }
 }

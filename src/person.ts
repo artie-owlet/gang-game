@@ -22,7 +22,7 @@ export class Person {
         } else {
             const [game] = args;
             this.id = generateId();
-            this.name = game.randomPersonName();
+            this.name = game.randomizer.randomPersonName();
         }
     }
 

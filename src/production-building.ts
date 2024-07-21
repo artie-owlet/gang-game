@@ -47,7 +47,7 @@ export class ProductionBuilding extends EmptyBuilding {
     }
 
     public get config(): Readonly<ProductionBuildingConfig> {
-        return this.game.productionBuildingConfig(this.type);
+        return this.game.rules.productionBuildingConfig(this.type);
     }
 
     public get currentReceipe(): Readonly<ProductionReceipe> | null {

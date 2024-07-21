@@ -31,7 +31,7 @@ export class Trader {
         } else {
             const [buyableResources, saleableResources, game] = args;
             this.id = generateId();
-            this.name = game.randomBuildingName();
+            this.name = game.randomizer.randomBuildingName();
             this.buyableItems_ = buyableResources.map((resourceType) => new TradeItem(resourceType, game));
             this.saleableItems_ = saleableResources.map((resourceType) => new TradeItem(resourceType, game));
         }

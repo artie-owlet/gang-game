@@ -48,8 +48,8 @@ export class Vehicle {
             this.position_ = position;
             this.driver_ = null;
             this.wallet = new Wallet(0);
-            this.cargo = new ResourceStorage(game.vehicleConfig(type).capacity, game);
-            this.drivePoints_ = game.vehicleConfig(type).drivePoints;
+            this.cargo = new ResourceStorage(game.rules.vehicleConfig(type).capacity, game);
+            this.drivePoints_ = game.rules.vehicleConfig(type).drivePoints;
             this.route_ = [];
             this.game = game;
         }

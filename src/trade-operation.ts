@@ -17,7 +17,7 @@ abstract class TradeOperation {
         protected game: GameContext,
     ) {
         this.resourceType = tradeItem.resourceType;
-        this.price = game.resourceConfig(tradeItem.resourceType).price;
+        this.price = game.rules.resourceConfig(tradeItem.resourceType).price;
     }
 
     public decreaseAmount(dec: number): void {

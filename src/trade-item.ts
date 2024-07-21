@@ -35,10 +35,10 @@ export class TradeItem {
             const [resourceType, game] = args;
             this.resourceType = resourceType;
 
-            const config = game.resourceConfig(resourceType).tradeItem;
-            this.maxAmount = randomFromSet(config.maxAmount, game);
-            this.updateInterval = randomFromSet(config.updateInterval, game);
-            this.updateAmount = randomFromSet(config.updateAmount, game);
+            const config = game.rules.resourceConfig(resourceType).tradeItem;
+            this.maxAmount = randomFromSet(config.maxAmount, game.randomizer.rng);
+            this.updateInterval = randomFromSet(config.updateInterval, game.randomizer.rng);
+            this.updateAmount = randomFromSet(config.updateAmount, game.randomizer.rng);
 
             this.amount_ = this.maxAmount;
             this.updateCountDown_ = this.updateInterval;

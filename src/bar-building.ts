@@ -37,7 +37,7 @@ export class BarBuilding extends EmptyBuilding {
     }
 
     public get config(): Readonly<BarBuildingConfig> {
-        return this.game.barBuildingConfig(this.type);
+        return this.game.rules.barBuildingConfig(this.type);
     }
 
     public update(): void {

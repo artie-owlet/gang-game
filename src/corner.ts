@@ -21,7 +21,7 @@ export class Corner {
             this.explored_ = data.explored;
         } else {
             const [game] = args;
-            this.name = game.randomCornerName();
+            this.name = game.randomizer.randomCornerName();
             this.explored_ = false;
         }
     }

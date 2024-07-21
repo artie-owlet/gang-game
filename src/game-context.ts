@@ -11,23 +11,30 @@ import type {
 } from './schema/rules/production-building-config';
 import type { ResourceConfig, ResourceType } from './schema/rules/resource-config';
 import type { VehicleConfig, VehicleType } from './schema/rules/vehicle-confg';
-import type { Randomizer } from './utils/random';
+import type { Rng } from './utils/random';
 import type { Vehicle } from './vehicle';
 
-export interface GameContext extends Randomizer {
-    city: City;
-
+export interface Rules {
     generalConfig: Readonly<GeneralConfig>;
     barBuildingConfig(barBuildingType: BarBuildingType): Readonly<BarBuildingConfig>;
     productionBuildingConfig(productionBuildingType: ProductionBuildingType): Readonly<ProductionBuildingConfig>;
     productionReceipe(productionBuildingType: ProductionBuildingType, receipeId: number): Readonly<ProductionReceipe>;
     resourceConfig(resourceType: ResourceType): Readonly<ResourceConfig>;
     vehicleConfig(vehicleType: VehicleType): Readonly<VehicleConfig>;
+}
 
+export interface Randomizer {
+    rng: Rng;
     randomBuildingName(): string;
     randomCornerName(): string;
     randomPersonName(): string;
+}
 
+export interface GameContext {
+    rules: Rules;
+    randomizer: Randomizer;
+
+    city: City;
     person(id: PersonId): Person;
     vehicle(id: VehicleId): Vehicle;
 }

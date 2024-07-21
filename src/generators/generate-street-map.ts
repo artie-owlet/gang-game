@@ -1,4 +1,4 @@
-import type { Randomizer } from '../utils/random';
+import type { Rng } from '../utils/random';
 
 // east and north borders of corner
 export interface CornerBorders {
@@ -25,7 +25,7 @@ function remove(arr: number[], value: number): boolean {
     return id >= 0;
 }
 
-export function generateStreetMap(size: number, rand: Randomizer): StreetMap {
+export function generateStreetMap(size: number, rand: Rng): StreetMap {
     const sizeSquare = size ** 2;
     const positions = new Array(sizeSquare).fill(0).map((_, id) => id);
     const borders: CornerBorders[] = new Array(sizeSquare).fill(0).map(() => ({ horz: true, vert: true }));

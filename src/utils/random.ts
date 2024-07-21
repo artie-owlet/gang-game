@@ -3,13 +3,13 @@ import { randomUUID } from 'crypto';
 import type { WeightedSet } from '../schema/utils/weighted-set';
 import type { FlavoredString } from './flavored-string';
 
-export interface Randomizer {
+export interface Rng {
     random(maxExcl: number): number;
 }
 
-export function randomFromSet(set: WeightedSet, rand: Randomizer): number {
+export function randomFromSet(set: WeightedSet, rng: Rng): number {
     const totalWeight = set.reduce((sum, item) => sum + item.weight, 0);
-    const rv = rand.random(totalWeight);
+    const rv = rng.random(totalWeight);
     let upper = 0;
     for (const { value, weight } of set) {
         upper += weight;
