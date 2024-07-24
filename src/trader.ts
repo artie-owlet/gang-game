@@ -1,8 +1,8 @@
+import { BaseNpc } from './base-npc';
 import type { GameContext } from './game-context';
-import { isTraderData, type TraderData, type TraderId } from './schema/data/trader-data';
+import { isTraderData, type TraderData } from './schema/data/trader-data';
 import type { ResourceType } from './schema/rules/resource-config';
 import { TradeItem } from './trade-item';
-import { generateId } from './utils/random';
 
 type CtorArgs = [TraderData] | [
     buyableResources: ResourceType[],
@@ -14,33 +14,27 @@ function isLoadCtorArgs(args: CtorArgs): args is [TraderData] {
     return isTraderData(args[0]);
 }
 
-export class Trader {
-    public readonly id: TraderId;
-    public readonly name: string;
-
+export class Trader extends BaseNpc<'TraderId'> {
     private buyableItems_: TradeItem[];
     private saleableItems_: TradeItem[];
 
     public constructor(...args: CtorArgs) {
         if (isLoadCtorArgs(args)) {
             const [data] = args;
-            this.id = data.id;
-            this.name = data.name;
+            super(data);
             this.buyableItems_ = data.buyableItems.map((item) => new TradeItem(item));
             this.saleableItems_ = data.saleableItems.map((item) => new TradeItem(item));
         } else {
             const [buyableResources, saleableResources, game] = args;
-            this.id = generateId();
-            this.name = game.randomizer.randomBuildingName();
+            super(game);
             this.buyableItems_ = buyableResources.map((resourceType) => new TradeItem(resourceType, game));
             this.saleableItems_ = saleableResources.map((resourceType) => new TradeItem(resourceType, game));
         }
     }
 
-    public serialize(): TraderData {
+    public override serialize(): TraderData {
         return {
-            id: this.id,
-            name: this.name,
+            ...super.serialize(),
             buyableItems: this.buyableItems_.map((item) => item.serialize()),
             saleableItems: this.saleableItems_.map((item) => item.serialize()),
         };
