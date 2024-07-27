@@ -1,18 +1,15 @@
 import ss from 'superstruct';
 
 import { defineFlavoredStringSchema } from '../../utils/flavored-string';
-import { resourceStorageSchema } from './resource-storage-data';
+import { defineBaseStorageBuildingDataSchema } from './base-storage-building-data';
 
-export const buildingIdSchema = defineFlavoredStringSchema('BuildingId');
+export const emptyBuildingIdSchema = defineFlavoredStringSchema('EmptyBuildingId');
 
-export type BuildingId = ss.Infer<typeof buildingIdSchema>;
+export type EmptyBuildingId = ss.Infer<typeof emptyBuildingIdSchema>;
 
-export const emptyBuildingDataSchema = ss.object({
-    id: buildingIdSchema,
-    name: ss.string(),
-    money: ss.number(),
-    storage: resourceStorageSchema,
-});
+export const emptyBuildingDataSchema = ss.intersection([
+    defineBaseStorageBuildingDataSchema(emptyBuildingIdSchema),
+]);
 
 export type EmptyBuildingData = ss.Infer<typeof emptyBuildingDataSchema>;
 

@@ -1,14 +1,19 @@
 import ss from 'superstruct';
 
+import { defineFlavoredStringSchema } from '../../utils/flavored-string';
 import { barBuildingTypeSchema } from '../rules/bar-building-config';
-import { emptyBuildingDataSchema } from './empty-building-data';
-import { personIdSchema } from './person-data';
+import { defineBaseStorageBuildingDataSchema } from './base-storage-building-data';
+import { gangsterIdSchema } from './gangster-data';
+
+export const barBuildingIdSchema = defineFlavoredStringSchema('BarBuildingId');
+
+export type BarBuildingId = ss.Infer<typeof barBuildingIdSchema>;
 
 export const barBuildingDataSchema = ss.intersection([
-    emptyBuildingDataSchema,
+    defineBaseStorageBuildingDataSchema(barBuildingIdSchema),
     ss.object({
         type: barBuildingTypeSchema,
-        managerId: ss.nullable(personIdSchema),
+        managerId: ss.nullable(gangsterIdSchema),
     }),
 ]);
 

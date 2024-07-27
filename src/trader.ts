@@ -1,12 +1,18 @@
-import { BaseNpc } from './base-npc';
+import { BasePerson } from './base-person';
 import type { GameContext } from './game-context';
 import { isTraderData, type TraderData } from './schema/data/trader-data';
 import type { ResourceType } from './schema/rules/resource-config';
+import type { TradeItemConfig, TraderType } from './schema/rules/trader-type-config';
 import { TradeItem } from './trade-item';
+import { randomBool } from './utils/random';
+
+function selectTradeResources(configs: TradeItemConfig[], game: GameContext): ResourceType[] {
+    return configs.filter((item) => randomBool(item.odds, game.randomizer.rng)).
+        map((item) => item.resourceType);
+}
 
 type CtorArgs = [TraderData] | [
-    buyableResources: ResourceType[],
-    saleableResources: ResourceType[],
+    type: TraderType,
     game: GameContext,
 ];
 
@@ -14,7 +20,7 @@ function isLoadCtorArgs(args: CtorArgs): args is [TraderData] {
     return isTraderData(args[0]);
 }
 
-export class Trader extends BaseNpc<'TraderId'> {
+export class Trader extends BasePerson<'TraderId'> {
     private buyableItems_: TradeItem[];
     private saleableItems_: TradeItem[];
 
@@ -25,10 +31,13 @@ export class Trader extends BaseNpc<'TraderId'> {
             this.buyableItems_ = data.buyableItems.map((item) => new TradeItem(item));
             this.saleableItems_ = data.saleableItems.map((item) => new TradeItem(item));
         } else {
-            const [buyableResources, saleableResources, game] = args;
+            const [type, game] = args;
             super(game);
-            this.buyableItems_ = buyableResources.map((resourceType) => new TradeItem(resourceType, game));
-            this.saleableItems_ = saleableResources.map((resourceType) => new TradeItem(resourceType, game));
+            const config = game.rules.traderConfig(type);
+            this.buyableItems_ = selectTradeResources(config.buyableResources, game).
+                map((resourceType) => new TradeItem(resourceType, game));
+            this.saleableItems_ = selectTradeResources(config.saleableResources, game).
+                map((resourceType) => new TradeItem(resourceType, game));
         }
     }
 

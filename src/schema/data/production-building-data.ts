@@ -1,14 +1,19 @@
 import ss from 'superstruct';
 
+import { defineFlavoredStringSchema } from '../../utils/flavored-string';
 import { productionReceipeSchema, productionBuildingTypeSchema } from '../rules/production-building-config';
-import { emptyBuildingDataSchema } from './empty-building-data';
-import { personIdSchema } from './person-data';
+import { defineBaseStorageBuildingDataSchema } from './base-storage-building-data';
+import { gangsterIdSchema } from './gangster-data';
+
+export const productionBuildingIdSchema = defineFlavoredStringSchema('ProductionBuildingId');
+
+export type ProductionBuildingId = ss.Infer<typeof productionBuildingIdSchema>;
 
 export const productionBuildingDataSchema = ss.intersection([
-    emptyBuildingDataSchema,
+    defineBaseStorageBuildingDataSchema(productionBuildingIdSchema),
     ss.object({
         type: productionBuildingTypeSchema,
-        managerId: ss.nullable(personIdSchema),
+        managerId: ss.nullable(gangsterIdSchema),
         currentReceipe: ss.nullable(productionReceipeSchema),
         countDown: ss.number(),
     }),

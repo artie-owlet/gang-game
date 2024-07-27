@@ -1,10 +1,15 @@
 import { randomUUID } from 'crypto';
 
+import type { Odds } from '../schema/utils/odds-schema';
 import type { WeightedSet } from '../schema/utils/weighted-set';
 import type { FlavoredString } from './flavored-string';
 
 export interface Rng {
     random(maxExcl: number): number;
+}
+
+export function randomBool(odds: Odds, rng: Rng): boolean {
+    return rng.random(odds[0] + odds[1]) < odds[0];
 }
 
 export function randomFromSet(set: WeightedSet, rng: Rng): number {
@@ -19,6 +24,7 @@ export function randomFromSet(set: WeightedSet, rng: Rng): number {
     }
     throw new Error('randomFromSet() failed');
 }
+
 export function generateId<T extends string>(): FlavoredString<T> {
-    return randomUUID() as FlavoredString<T>;
+    return randomUUID();
 }

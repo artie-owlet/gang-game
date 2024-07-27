@@ -1,10 +1,10 @@
-import ss, { type Infer } from 'superstruct';
+import ss from 'superstruct';
 
 import { defineFlavoredStringSchema } from '../../utils/flavored-string';
 
 export const vehicleTypeSchema = defineFlavoredStringSchema('VehicleType');
 
-export type VehicleType = Infer<typeof vehicleTypeSchema>;
+export type VehicleType = ss.Infer<typeof vehicleTypeSchema>;
 
 const vehicleConfigSchema = ss.object({
     type: vehicleTypeSchema,

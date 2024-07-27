@@ -1,6 +1,7 @@
-import { EmptyBuilding } from './empty-building';
+import { BaseStorageBuilding } from './base-storage-building';
+import type { EmptyBuilding } from './empty-building';
 import type { GameContext } from './game-context';
-import type { Person } from './person';
+import type { Gangster } from './gangster';
 import { isProductionBuildingData, type ProductionBuildingData } from './schema/data/production-building-data';
 import type {
     ProductionBuildingConfig,
@@ -18,9 +19,9 @@ function isLoadCtorArgs(args: CtorArgs): args is [ProductionBuildingData, GameCo
     return isProductionBuildingData(args[0]);
 }
 
-export class ProductionBuilding extends EmptyBuilding {
+export class ProductionBuilding extends BaseStorageBuilding<'ProductionBuildingId'> {
     public readonly type: ProductionBuildingType;
-    public readonly manager: Person | null;
+    public readonly manager: Gangster | null;
 
     private currentReceipe_: Readonly<ProductionReceipe> | null;
     private countDown_: number;
@@ -31,7 +32,7 @@ export class ProductionBuilding extends EmptyBuilding {
             const [data, game] = args;
             super(data, game);
             this.type = data.type;
-            this.manager = data.managerId ? game.person(data.managerId) : null;
+            this.manager = data.managerId ? game.gangster(data.managerId) : null;
             this.currentReceipe_ = data.currentReceipe;
             this.countDown_ = data.countDown;
             this.game = game;
@@ -44,6 +45,16 @@ export class ProductionBuilding extends EmptyBuilding {
             this.countDown_ = 0;
             this.game = game;
         }
+    }
+
+    public override serialize(): ProductionBuildingData {
+        return {
+            ...super.serialize(),
+            type: this.type,
+            managerId: this.manager ? this.manager.id : null,
+            currentReceipe: this.currentReceipe_,
+            countDown: this.countDown_,
+        };
     }
 
     public get config(): Readonly<ProductionBuildingConfig> {

@@ -21,6 +21,13 @@ export default tseslint.config(
             perfectionist,
         },
         rules: {
+            '@typescript-eslint/consistent-type-assertions': [
+                'error',
+                {
+                    assertionStyle: 'angle-bracket',
+                    objectLiteralTypeAssertions: 'never',
+                },
+            ],
             '@typescript-eslint/consistent-type-imports': 'error',
             '@typescript-eslint/explicit-member-accessibility': 'error',
             '@typescript-eslint/no-confusing-void-expression': [

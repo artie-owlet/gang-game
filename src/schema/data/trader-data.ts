@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
 import { defineFlavoredStringSchema } from '../../utils/flavored-string';
-import { defineBaseNpcDataSchema } from './base-npc-data';
+import { defineBasePersonDataSchema } from './base-person-data';
 import { tradeItemDataSchema } from './trade-item-data';
 
 export const traderIdSchema = defineFlavoredStringSchema('TraderId');
@@ -9,7 +9,7 @@ export const traderIdSchema = defineFlavoredStringSchema('TraderId');
 export type TraderId = ss.Infer<typeof traderIdSchema>;
 
 export const traderDataSchema = ss.intersection([
-    defineBaseNpcDataSchema(traderIdSchema),
+    defineBasePersonDataSchema(traderIdSchema),
     ss.object({
         buyableItems: ss.array(tradeItemDataSchema),
         saleableItems: ss.array(tradeItemDataSchema),
