@@ -1,5 +1,5 @@
 {
-  "name": "@artie-owlet/node-app-template",
+  "name": "@artie-owlet/gang-game",
   "version": "0.0.1-dev.0",
   "description": "",
   "main": "dist/index.js",
@@ -13,23 +13,33 @@
     "build-tests": "yarn tsc -p test/tsconfig.json --noEmit",
     "clean": "rm -rf build/",
     "coverage": "c8 yarn test",
+    "dev": "ts-node src/index.ts",
     "doc": "typedoc",
     "lint": "eslint src/",
+    "lint-fix": "eslint --fix src/",
     "start": "node dist/index.js",
     "test": "mocha test/",
     "test-release": "yarn build-tests && c8 mocha --config .mocharc-release.yml test/"
   },
   "packageManager": "yarn@4.3.1",
   "devDependencies": {
+    "@artie-owlet/chifir": "^2.0.0",
     "@eslint/js": "^8",
+    "@stylistic/eslint-plugin": "^2.3.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.14.2",
+    "@typescript-eslint/types": "^7.15.0",
     "c8": "^10.1.2",
     "eslint": ">=8.57.0 <9",
+    "eslint-plugin-perfectionist": "^2.11.0",
     "mocha": "^10.4.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.25.13",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.13.0"
+  },
+  "dependencies": {
+    "pure-rand": "^6.1.0",
+    "superstruct": "^2.0.0"
   }
 }
