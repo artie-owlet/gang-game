@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
+import type { GameContext } from '../game-objects/game-context';
 import { resourceTypeSchema, type ResourceType } from '../rules/resource-config';
-import type { GameContext } from '../services/game-context';
 import { createBaseClass } from '../utils/create-base-class';
 
 export const resourceStorageItemSchema = ss.object({
@@ -11,14 +11,14 @@ export const resourceStorageItemSchema = ss.object({
 
 export type ResourceStorageItem = ss.Infer<typeof resourceStorageItemSchema>;
 
-export const resourceStorageSchema = ss.object({
+const resourceStorageSchema = ss.object({
     capacity: ss.number(),
     items: ss.array(resourceStorageItemSchema),
 });
 
-export type ResourceStorageData = ss.Infer<typeof resourceStorageSchema>;
+type ResourceStorageData = ss.Infer<typeof resourceStorageSchema>;
 
-export class ResourceStorage extends createBaseClass<ResourceStorageData>() {
+class ResourceStorage extends createBaseClass<ResourceStorageData>() {
     public constructor(
         data: ResourceStorageData,
         private game: () => GameContext,
@@ -86,10 +86,16 @@ export class ResourceStorage extends createBaseClass<ResourceStorageData>() {
     }
 }
 
-export class WithStorage {
+export const withResourceStorageSchema = ss.object({
+    storage: resourceStorageSchema,
+});
+
+type WithResourceStorageData = ss.Infer<typeof withResourceStorageSchema>;
+
+export class WithResourceStorage {
     public storage: ResourceStorage;
 
-    public constructor({ storage }: { storage: ResourceStorage | ResourceStorageData }, game: GameContext) {
-        this.storage = storage instanceof ResourceStorage ? storage : new ResourceStorage(storage, () => game);
+    public constructor({ storage }: WithResourceStorageData, game: GameContext) {
+        this.storage = new ResourceStorage(storage, () => game);
     }
 }
