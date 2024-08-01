@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "pure-rand": "^6.1.0",
-    "superstruct": "^2.0.0"
+    "superstruct": "^2.0.0",
+    "ts-mixer": "^6.0.4"
   }
 }

@@ -71,6 +71,7 @@ export default tseslint.config(
                 'error',
                 {
                     code: 120,
+                    ignoreComments: true,
                 },
             ],
             '@stylistic/multiline-comment-style': 'off',
