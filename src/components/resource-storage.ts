@@ -86,16 +86,16 @@ class ResourceStorage extends createBaseClass<ResourceStorageData>() {
     }
 }
 
-export const withResourceStorageSchema = ss.object({
+export const ResourceStorageComponentSchema = ss.object({
     storage: resourceStorageSchema,
 });
 
-type WithResourceStorageData = ss.Infer<typeof withResourceStorageSchema>;
+type ResourceStorageComponentData = ss.Infer<typeof ResourceStorageComponentSchema>;
 
-export class WithResourceStorage {
+export class ResourceStorageComponent {
     public storage: ResourceStorage;
 
-    public constructor({ storage }: WithResourceStorageData, game: GameContext) {
+    public constructor({ storage }: ResourceStorageComponentData, game: GameContext) {
         this.storage = new ResourceStorage(storage, () => game);
     }
 }
