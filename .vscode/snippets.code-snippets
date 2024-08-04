@@ -1,0 +1,23 @@
+{
+    "Create component": {
+        "scope": "typescript",
+        "prefix": "component",
+        "body": [
+            "import ss from 'superstruct';",
+            "",
+            "import { createBaseClass } from '../utils/create-base-class';",
+            "",
+            "export const ${1}Schema = ss.object({",
+            "});",
+            "",
+            "type ${1/(.)(.*)/${1:/upcase}$2/g}Data = ss.Infer<typeof ${1}Schema>;",
+            "",
+            "export class ${1/(.)(.*)/${1:/upcase}$2/g} extends createBaseClass<${1/(.)(.*)/${1:/upcase}$2/g}Data>() {",
+            "    public constructor(data: ${1/(.)(.*)/${1:/upcase}$2/g}Data) {",
+            "        super(data);",
+            "    }",
+            "}",
+            ""
+        ]
+    }
+}

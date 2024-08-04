@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
+import { Direction } from '../types/direction';
 import { createBaseClass } from '../utils/create-base-class';
-import { Direction } from '../utils/direction';
 import type { Rng } from '../utils/random';
 
 // east (=1) and north (=2) borders of corner

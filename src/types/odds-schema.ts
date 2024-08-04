@@ -1,5 +1,6 @@
 import ss from 'superstruct';
 
+// [unluck, luck]
 export const oddsSchema = ss.tuple([
     ss.number(),
     ss.number(),

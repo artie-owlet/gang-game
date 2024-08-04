@@ -1,8 +1,8 @@
 import { randomUUID } from 'crypto';
 
+import type { Odds } from '../types/odds-schema';
+import type { WeightedSet } from '../types/weighted-set';
 import type { FlavoredString } from './flavored-string';
-import type { Odds } from './odds-schema';
-import type { WeightedSet } from './weighted-set';
 
 export interface Rng {
     random(maxExcl: number): number;
