@@ -1,6 +1,6 @@
 type DataCtor<T extends object> = abstract new(data: T) => T;
 
-type ComponentCtor<C extends object, Ctx extends object> = abstract new(ctx?: Ctx) => C;
+type ComponentCtor<C extends object, Ctx extends object> = abstract new(ctx: Ctx) => C;
 
 type ComponentCtorArray<C extends object[], Ctx extends object[]> = {
     [K in keyof C]: K extends keyof Ctx ? ComponentCtor<C[K], Ctx[K]> : never
@@ -19,4 +19,7 @@ export function createGameObjectClass<D extends object, C extends object[], Ctx 
             Object.assign(this, data);
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    Comps.forEach((Comp) => Object.assign(GameObject.prototype, Comp.prototype));
+    return <abstract new(data: D, ctx: Intersection<Ctx>) => Intersection<[DataCtor<D>, ...C]>>GameObject;
 }
