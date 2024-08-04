@@ -1,25 +1,45 @@
-type DataCtor<T extends object> = abstract new(data: T) => T;
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Ctor = abstract new(...args: any) => any;
 
-type ComponentCtor<C extends object, Ctx extends object> = abstract new(ctx: Ctx) => C;
+type Intersection<T extends any[]> = T extends [infer A, infer B, ...infer Rest] ?
+    Intersection<[A & B, ...Rest]> : (T extends [infer A] ? A : null);
 
-type ComponentCtorArray<C extends object[], Ctx extends object[]> = {
-    [K in keyof C]: K extends keyof Ctx ? ComponentCtor<C[K], Ctx[K]> : never
+type CtxArgArray<C extends Ctor[]> = {
+    [K in keyof C]: ConstructorParameters<C[K]> extends [] ? NonNullable<unknown> : ConstructorParameters<C[K]>[0]
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Intersection<T extends any[]> = T extends [infer A, infer B, ...infer Rest] ?
-    Intersection<[A & B, ...Rest]> : T[0];
+type InstanceTypeArray<C extends Ctor[]> = {
+    [K in keyof C]: InstanceType<C[K]>
+};
 
-export function createGameObjectClass<D extends object, C extends object[], Ctx extends object[]>(
-    ...Comps: ComponentCtorArray<C, Ctx>
-): abstract new(data: D, ctx: Intersection<Ctx>) => Intersection<[DataCtor<D>, ...C]> {
-    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-    abstract class GameObject {
-        public constructor(data: D, protected ctx: Intersection<Ctx>) {
-            Object.assign(this, data);
-        }
+type ReturnType<D, C extends Ctor[]> =
+    abstract new(data: D, ctx: Intersection<CtxArgArray<C>>) =>
+        D & Intersection<InstanceTypeArray<C>>;
+
+export class GameObjectFactory<C extends Ctor[]> {
+    private Comps: Ctor[];
+
+    public constructor(...Comps: C) {
+        this.Comps = Comps;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    Comps.forEach((Comp) => Object.assign(GameObject.prototype, Comp.prototype));
-    return <abstract new(data: D, ctx: Intersection<Ctx>) => Intersection<[DataCtor<D>, ...C]>>GameObject;
+
+    public create<D>(): ReturnType<D, C> {
+        abstract class GameObject {
+            public constructor(data: D, protected ctx: any) {
+                Object.assign(this, data);
+            }
+        }
+        this.Comps.forEach((Comp) => {
+            console.log(Object.getPrototypeOf(Comp));
+            const descs = Object.getOwnPropertyDescriptors(Comp.prototype);
+            for (const key in descs) {
+                const prop = descs[key];
+                if (prop && key !== 'constructor') {
+                    Object.defineProperty(GameObject.prototype, key, prop);
+                }
+            }
+        });
+        return <ReturnType<D, C>>GameObject;
+    }
 }

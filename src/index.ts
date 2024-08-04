@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { createGameObjectClass } from './utils/create-game-object-class';
+import { GameObjectFactory } from './utils/create-game-object-class';
 
 interface Data {
     foo: string;
@@ -11,7 +11,7 @@ interface Foo {
     foo: string;
 }
 
-abstract class Foo {
+class Foo {
     public constructor(protected ctx: { getFoo: () => string }) {
     }
 
@@ -24,7 +24,7 @@ interface Bar {
     bar: string;
 }
 
-abstract class Bar {
+class Bar {
     public constructor(protected ctx: { getBar: () => string }) {
     }
 
@@ -34,6 +34,20 @@ abstract class Bar {
 }
 
 // eslint-disable-next-line @stylistic/max-len
-class Baz extends createGameObjectClass<Data, [Foo, Bar], [{ getFoo: () => string }, { getBar: () => string }]>(Foo, Bar) {
-    public constructor(data: Data, protected ctx: )
+class Baz extends new GameObjectFactory(Foo, Bar).create<Data>() {
+    public constructor(data: Data) {
+        super(data, {
+            getFoo: () => this.foo,
+            getBar: () => this.bar,
+        });
+    }
 }
+
+const test = new Baz({
+    foo: 'foo',
+    bar: 'bar',
+    baz: 'baz',
+});
+
+// eslint-disable-next-line no-console
+console.log(test.printFoo(), test.printBar(), test.baz);
