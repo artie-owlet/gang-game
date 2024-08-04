@@ -3,7 +3,7 @@ import ss from 'superstruct';
 import { buildingSchema } from '../components/building';
 import { manageableSchema } from '../components/manageable';
 import { barTypeSchema } from '../rules/bar-config';
-import { createBaseClass } from '../utils/create-base-class';
+// import { createBaseClass } from '../utils/create-base-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 
 export const barIdSchema = defineFlavoredStringSchema('BarId');
