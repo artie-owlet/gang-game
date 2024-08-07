@@ -28,7 +28,6 @@ __metadata:
     mocha: "npm:^10.4.0"
     pure-rand: "npm:^6.1.0"
     superstruct: "npm:^2.0.0"
-    ts-mixer: "npm:^6.0.4"
     ts-node: "npm:^10.9.2"
     typedoc: "npm:^0.25.13"
     typescript: "npm:^5.4.5"
@@ -2628,13 +2627,6 @@ __metadata:
   peerDependencies:
     typescript: ">=4.2.0"
   checksum: 10c0/f54a0ba9ed56ce66baea90a3fa087a484002e807f28a8ccb2d070c75e76bde64bd0f6dce98b3802834156306050871b67eec325cb4e918015a360a3f0868c77c
-  languageName: node
-  linkType: hard
-
-"ts-mixer@npm:^6.0.4":
-  version: 6.0.4
-  resolution: "ts-mixer@npm:6.0.4"
-  checksum: 10c0/4c442fc99cdffd4a3f0ce55c624fb703f4ded5cab6912f97705489565c4a74d3e4213f10c33499ec5150900a628d38537a9a6a9e35b5045b65129a84b4db21ae
   languageName: node
   linkType: hard
 
