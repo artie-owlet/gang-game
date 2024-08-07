@@ -4,8 +4,8 @@ type Ctor = abstract new(...args: any) => any;
 type Intersection<T extends any[]> = T extends [infer A, infer B, ...infer Rest] ?
     Intersection<[A & B, ...Rest]> : (T extends [infer A] ? A : null);
 
-type CtxArgArray<C extends Ctor[]> = {
-    [K in keyof C]: ConstructorParameters<C[K]> extends [] ? NonNullable<unknown> : ConstructorParameters<C[K]>[0]
+type CtxArray<C extends Ctor[]> = {
+    [K in keyof C]: InstanceType<C[K]> extends { ctx: infer Ctx } ? Ctx : NonNullable<unknown>
 };
 
 type InstanceTypeArray<C extends Ctor[]> = {
@@ -13,8 +13,8 @@ type InstanceTypeArray<C extends Ctor[]> = {
 };
 
 type ReturnType<D, C extends Ctor[]> =
-    abstract new(data: D, ctx: Intersection<CtxArgArray<C>>) =>
-        D & Intersection<InstanceTypeArray<C>>;
+    abstract new(data: D, ctx: Intersection<CtxArray<C>>) =>
+        D & Intersection<InstanceTypeArray<C>> & { ctx: Intersection<CtxArray<C>> };
 
 export class GameObjectFactory<C extends Ctor[]> {
     private Comps: Ctor[];
@@ -40,4 +40,8 @@ export class GameObjectFactory<C extends Ctor[]> {
         });
         return <ReturnType<D, C>>GameObject;
     }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+export abstract class EmptyComponent {
 }

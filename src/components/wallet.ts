@@ -1,14 +1,15 @@
 import ss from 'superstruct';
 
-import { createBaseClass } from '../utils/create-base-class';
-
 export const walletSchema = ss.object({
     money: ss.number(),
 });
 
 type WalletData = ss.Infer<typeof walletSchema>;
 
-export abstract class Wallet extends createBaseClass<WalletData>() {
+export interface Wallet extends WalletData {
+}
+
+export abstract class Wallet {
     public addMoney(sum: number): void {
         this.money += sum;
     }

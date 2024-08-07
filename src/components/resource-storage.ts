@@ -1,8 +1,7 @@
 import ss from 'superstruct';
 
-import type { GameContext } from '../game-objects/game-context';
+import type { Rules } from '../game-objects/game-context';
 import { resourceTypeSchema, type ResourceType } from '../rules/resource-config';
-import { createBaseClass } from '../utils/create-base-class';
 
 const resourceStorageItemSchema = ss.object({
     resourceType: resourceTypeSchema,
@@ -18,14 +17,11 @@ export const resourceStorageSchema = ss.object({
 
 type ResourceStorageData = ss.Infer<typeof resourceStorageSchema>;
 
-export abstract class ResourceStorage extends createBaseClass<ResourceStorageData>() {
-    public constructor(
-        data: ResourceStorageData,
-        private game: GameContext,
-    ) {
-        super(data);
-    }
+export interface ResourceStorage extends ResourceStorageData {
+    ctx: { rules: Pick<Rules, 'resourceConfig'> };
+}
 
+export abstract class ResourceStorage {
     public get storageTotalSize(): number {
         return this.storageItems.reduce((acc, item) => {
             return acc + item.amount * this.getResourceUnitSize(item.resourceType);
@@ -82,6 +78,6 @@ export abstract class ResourceStorage extends createBaseClass<ResourceStorageDat
     }
 
     private getResourceUnitSize(resourceType: ResourceType): number {
-        return this.game.rules.resourceConfig(resourceType).size;
+        return this.ctx.rules.resourceConfig(resourceType).size;
     }
 }

@@ -2,7 +2,6 @@
 import ss from 'superstruct';
 
 import type { Randomizer } from '../game-objects/game-context';
-import { createBaseClass } from '../utils/create-base-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import { randomBool } from '../utils/random';
 
@@ -22,26 +21,17 @@ export const personSchema = ss.object({
 
 type PersonData = ss.Infer<typeof personSchema>;
 
-export function createPerson(base: new(data: any) => any) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface Person extends PersonData {}
-
-    abstract class Person extends base {
-    }
-    return Person;
+export interface Person extends PersonData {
 }
 
-// export interface Context {
-//     randomizer: Randomizer;
-// }
-
-// export abstract class Person extends createBaseClass<PersonData>() {
-//     public static create(randomizer: Randomizer): PersonData {
-//         const gender = randomBool([1, 1], randomizer.rng) ? 'female' : 'male';
-//         return {
-//             gender,
-//             personName: randomizer.personName(gender),
-//             photoId: randomizer.photo(gender),
-//         };
-//     }
-// }
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+export abstract class Person {
+    public static create(randomizer: Randomizer): PersonData {
+        const gender = randomBool([1, 1], randomizer.rng) ? 'female' : 'male';
+        return {
+            gender,
+            personName: randomizer.personName(gender),
+            photoId: randomizer.photo(gender),
+        };
+    }
+}

@@ -12,11 +12,8 @@ interface Foo {
 }
 
 class Foo {
-    public constructor(protected ctx: { getFoo: () => string }) {
-    }
-
     public printFoo(): string {
-        return this.foo + this.ctx.getFoo();
+        return this.foo;
     }
 }
 
@@ -25,7 +22,7 @@ interface Bar {
 }
 
 class Bar {
-    public constructor(protected ctx: { getBar: () => string }) {
+    public constructor(public ctx: { getBar: () => string }) {
     }
 
     public printBar(): string {
@@ -37,9 +34,12 @@ class Bar {
 class Baz extends new GameObjectFactory(Foo, Bar).create<Data>() {
     public constructor(data: Data) {
         super(data, {
-            getFoo: () => this.foo,
             getBar: () => this.bar,
         });
+    }
+
+    public test(): string {
+        return this.ctx.getBar();
     }
 }
 
@@ -50,4 +50,4 @@ const test = new Baz({
 });
 
 // eslint-disable-next-line no-console
-console.log(test.printFoo(), test.printBar(), test.baz);
+console.log(test.printFoo(), test.printBar(), test.baz, test.test());
