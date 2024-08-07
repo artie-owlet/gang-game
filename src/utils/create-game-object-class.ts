@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Ctor = abstract new(...args: any) => any;
 
@@ -31,7 +30,6 @@ export class GameObjectFactory<C extends Ctor[]> {
             }
         }
         this.Comps.forEach((Comp) => {
-            console.log(Object.getPrototypeOf(Comp));
             const descs = Object.getOwnPropertyDescriptors(Comp.prototype);
             for (const key in descs) {
                 const prop = descs[key];

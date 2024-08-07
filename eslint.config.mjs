@@ -36,6 +36,12 @@ export default tseslint.config(
                     ignoreArrowShorthand: true,
                 },
             ],
+            '@typescript-eslint/no-empty-interface': [
+                'error',
+                {
+                    allowSingleExtends: true,
+                },
+            ],
             '@typescript-eslint/no-shadow': 'error',
             '@typescript-eslint/no-unused-vars': [
                 'error',
@@ -125,6 +131,12 @@ export default tseslint.config(
             parserOptions: {
                 project: './tsconfig-base.json',
             },
+        },
+    },
+    {
+        files: ['src/components/*.ts'],
+        rules: {
+            '@typescript-eslint/no-unsafe-declaration-merging': 'off',
         },
     },
 );
