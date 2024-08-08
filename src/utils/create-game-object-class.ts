@@ -48,4 +48,8 @@ export class GameObjectFactory<C extends Ctor[]> {
     }
 }
 
-export type ExtendCtx<Ctx, C extends Ctor[]> = Ctx & Intersection<CtxArray<C>>;
+type InstanceCtxArray<C extends any[]> = C extends [] ? [NonNullable<unknown>] : {
+    [K in keyof C]: C[K] extends { ctx: infer Ctx } ? Ctx : NonNullable<unknown>
+};
+
+export type ExtendCtx<Ctx, C extends any[]> = Ctx & Intersection<InstanceCtxArray<C>>;

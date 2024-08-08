@@ -16,12 +16,14 @@ interface Context {
     upgrades: () => ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<string>>>[];
 }
 
+type ExtendedContext = ExtendCtx<Context, [Building, ResourceStorage, Wallet]>;
+
 export interface BuildingUpgradeable extends BuildingUpgradeableData, Building, ResourceStorage, Wallet {
-    ctx: ExtendCtx<Context, [typeof Building, typeof ResourceStorage, typeof Wallet]>;
+    ctx: ExtendedContext;
 }
 
 export abstract class BuildingUpgradeable {
-    public canUpgrade(toType: string): boolean {
+    public canUpgradeBuilding(toType: string): boolean {
         const upgrade = this.ctx.upgrades().find((up) => up.toType === toType);
         if (!upgrade) {
             return false;
@@ -37,6 +39,16 @@ export abstract class BuildingUpgradeable {
         return true;
     }
 
-    public upgrade(toType: string): void {
+    public upgradeBuilding(toType: string): void {
+        if (!this.canUpgradeBuilding(toType)) {
+            throw new Error(`Cannot upgrade building to type ${toType}`);
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const upgrade = this.ctx.upgrades().find((up) => up.toType === toType)!;
+        this.takeMoney(upgrade.money);
+        upgrade.resources.forEach((up) => this.takeResource(up.resourceType, up.amount));
+
+        // FIXME: Implement upgrade
     }
 }
