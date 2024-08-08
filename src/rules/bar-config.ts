@@ -10,6 +10,8 @@ export type BarType = ss.Infer<typeof barTypeSchema>;
 
 const barUpgradeSchema = defineBuildingUpgradeSchema(barTypeSchema);
 
+export type BarUpgrade = ss.Infer<typeof barUpgradeSchema>;
+
 export const barConfigSchema = ss.object({
     type: barTypeSchema,
     priceMult: ss.number(),

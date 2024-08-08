@@ -1,30 +1,29 @@
 import ss from 'superstruct';
 
 import type { defineBuildingUpgradeSchema } from '../rules/building-upgrade';
-import type { ExtendCtx } from '../utils/create-game-object-class';
 import type { Building } from './building';
 import type { ResourceStorage } from './resource-storage';
 import type { Wallet } from './wallet';
 
-const buildingUpgradeableSchema = ss.object({
+export const buildingUpgradeableSchema = ss.object({
+    type: ss.string(),
     upgradeCountDown: ss.number(),
 });
 
 type BuildingUpgradeableData = ss.Infer<typeof buildingUpgradeableSchema>;
 
-interface Context {
-    upgrades: () => ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<string>>>[];
-}
-
-type ExtendedContext = ExtendCtx<Context, [Building, ResourceStorage, Wallet]>;
-
 export interface BuildingUpgradeable extends BuildingUpgradeableData, Building, ResourceStorage, Wallet {
-    ctx: ExtendedContext;
 }
+
+export type BuildingUpgradeChanges = Pick<BuildingUpgradeable, 'type' | 'upgradeCountDown'>;
 
 export abstract class BuildingUpgradeable {
+    public get isUnderConstruction(): boolean {
+        return this.upgradeCountDown > 0;
+    }
+
     public canUpgradeBuilding(toType: string): boolean {
-        const upgrade = this.ctx.upgrades().find((up) => up.toType === toType);
+        const upgrade = this.getBuildingUpgrades().find((up) => up.toType === toType);
         if (!upgrade) {
             return false;
         }
@@ -45,10 +44,17 @@ export abstract class BuildingUpgradeable {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const upgrade = this.ctx.upgrades().find((up) => up.toType === toType)!;
+        const upgrade = this.getBuildingUpgrades().find((up) => up.toType === toType)!;
         this.takeMoney(upgrade.money);
         upgrade.resources.forEach((up) => this.takeResource(up.resourceType, up.amount));
 
-        // FIXME: Implement upgrade
+        this.replaceBuilding({
+            type: toType,
+            upgradeCountDown: upgrade.time,
+        });
     }
+
+    protected abstract getBuildingUpgrades(): ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<string>>>[];
+
+    protected abstract replaceBuilding(changes: BuildingUpgradeChanges): void;
 }

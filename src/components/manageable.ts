@@ -9,14 +9,13 @@ export const manageableSchema = ss.object({
 
 type ManageableData = ss.Infer<typeof manageableSchema>;
 
-type Context = Pick<GameContext, 'gangster'>;
-
 export interface Manageable extends ManageableData {
-    ctx: Context;
 }
 
 export abstract class Manageable {
     public get manager(): Gangster | null {
-        return this.managerId ? this.ctx.gangster(this.managerId) : null;
+        return this.managerId ? this.getGangster(this.managerId) : null;
     }
+
+    protected abstract getGangster(...args: Parameters<GameContext['gangster']>): ReturnType<GameContext['gangster']>;
 }

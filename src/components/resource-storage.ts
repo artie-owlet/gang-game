@@ -17,10 +17,7 @@ export const resourceStorageSchema = ss.object({
 
 type ResourceStorageData = ss.Infer<typeof resourceStorageSchema>;
 
-type Context = Pick<Rules, 'resourceConfig'>;
-
 export interface ResourceStorage extends ResourceStorageData {
-    ctx: Context;
 }
 
 export abstract class ResourceStorage {
@@ -79,7 +76,9 @@ export abstract class ResourceStorage {
         }
     }
 
+    protected abstract getResourceConfig(...args: Parameters<Rules['resourceConfig']>): ReturnType<Rules['resourceConfig']>;
+
     private getResourceUnitSize(resourceType: ResourceType): number {
-        return this.ctx.resourceConfig(resourceType).size;
+        return this.getResourceConfig(resourceType).size;
     }
 }

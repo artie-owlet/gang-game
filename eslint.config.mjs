@@ -136,12 +136,7 @@ export default tseslint.config(
     {
         files: ['src/components/*.ts'],
         rules: {
-            '@typescript-eslint/no-extraneous-class': [
-                'error',
-                {
-                    allowEmpty: true,
-                },
-            ],
+            '@typescript-eslint/no-extraneous-class': 'off',
             '@typescript-eslint/no-unsafe-declaration-merging': 'off',
         },
     },

@@ -24,7 +24,6 @@ type PersonData = ss.Infer<typeof personSchema>;
 export interface Person extends PersonData {
 }
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class Person {
     public static create(randomizer: Randomizer): PersonData {
         const gender = randomBool([1, 1], randomizer.rng) ? 'female' : 'male';
