@@ -14,7 +14,7 @@ type InstanceTypeArray<C extends Ctor[]> = {
 
 type IsEmpty<T> = T extends Record<string, never> ? true : false;
 
-type ReturnType<D, C extends Ctor[]> = IsEmpty<Intersection<CtxArray<C>>> extends true ? (
+type GameObjectType<D, C extends Ctor[]> = IsEmpty<Intersection<CtxArray<C>>> extends true ? (
     abstract new(data: D) =>
         D & Intersection<InstanceTypeArray<C>>
 ) : (
@@ -29,7 +29,7 @@ export class GameObjectFactory<C extends Ctor[]> {
         this.Comps = Comps;
     }
 
-    public create<D>(): ReturnType<D, C> {
+    public create<D>(): GameObjectType<D, C> {
         abstract class GameObject {
             public constructor(data: D, protected ctx: any) {
                 Object.assign(this, data);
@@ -44,6 +44,8 @@ export class GameObjectFactory<C extends Ctor[]> {
                 }
             }
         });
-        return <ReturnType<D, C>>GameObject;
+        return <GameObjectType<D, C>>GameObject;
     }
 }
+
+export type ExtendCtx<Ctx, C extends Ctor[]> = Ctx & Intersection<CtxArray<C>>;

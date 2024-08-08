@@ -9,8 +9,10 @@ export const manageableSchema = ss.object({
 
 type ManageableData = ss.Infer<typeof manageableSchema>;
 
+type Context = Pick<GameContext, 'gangster'>;
+
 export interface Manageable extends ManageableData {
-    ctx: Pick<GameContext, 'gangster'>;
+    ctx: Context;
 }
 
 export abstract class Manageable {
