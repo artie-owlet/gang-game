@@ -1,16 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type Ctor = abstract new(...args: any) => any;
+import type { GameContext } from '../game-objects/game-context';
 
-type Intersection<T extends any[]> = T extends [infer A, infer B, ...infer Rest] ?
+type Ctor = abstract new() => unknown;
+
+type Intersection<T extends unknown[]> = T extends [infer A, infer B, ...infer Rest] ?
     Intersection<[A & B, ...Rest]> : (T extends [infer A] ? A : NonNullable<unknown>);
 
 type InstanceTypeArray<C extends Ctor[]> = {
     [K in keyof C]: InstanceType<C[K]>
 };
 
-type GameObjectType<D, C extends Ctor[]> =
-    abstract new(data: D) => D & Intersection<InstanceTypeArray<C>>;
+type HasContext<T extends unknown[]> = T extends [infer A, ...infer Rest] ? (
+    A extends { ctx: GameContext } ? true : HasContext<Rest>
+) : false;
 
+type GameObjectType<D, C extends Ctor[]> = HasContext<InstanceTypeArray<C>> extends true ? (
+    abstract new(data: D, ctx: GameContext) =>
+        D & Intersection<InstanceTypeArray<C>>
+) : (
+    abstract new(data: D) =>
+        D & Intersection<InstanceTypeArray<C>>
+);
 
 export class GameObjectFactory<C extends Ctor[]> {
     private Comps: Ctor[];
@@ -21,7 +30,7 @@ export class GameObjectFactory<C extends Ctor[]> {
 
     public create<D>(): GameObjectType<D, C> {
         abstract class GameObject {
-            public constructor(data: D, protected ctx: any) {
+            public constructor(data: D, public ctx: unknown) {
                 Object.assign(this, data);
             }
         }

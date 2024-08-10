@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
-import type { Rules } from '../game-objects/game-context';
 import { resourceTypeSchema, type ResourceType } from '../rules/resource-config';
+import type { WithContext } from './with-context';
 
 const resourceStorageItemSchema = ss.object({
     resourceType: resourceTypeSchema,
@@ -17,7 +17,7 @@ export const resourceStorageSchema = ss.object({
 
 type ResourceStorageData = ss.Infer<typeof resourceStorageSchema>;
 
-export interface ResourceStorage extends ResourceStorageData {
+export interface ResourceStorage extends ResourceStorageData, WithContext {
 }
 
 export abstract class ResourceStorage {
@@ -76,9 +76,7 @@ export abstract class ResourceStorage {
         }
     }
 
-    protected abstract getResourceConfig(...args: Parameters<Rules['resourceConfig']>): ReturnType<Rules['resourceConfig']>;
-
     private getResourceUnitSize(resourceType: ResourceType): number {
-        return this.getResourceConfig(resourceType).size;
+        return this.ctx.rules.resourceConfig(resourceType).size;
     }
 }

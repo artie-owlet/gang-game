@@ -2,7 +2,6 @@ import type { GenderType, PhotoId } from '../components/person';
 import type { BarConfig, BarType } from '../rules/bar-config';
 import type { ResourceConfig, ResourceType } from '../rules/resource-config';
 import type { Rng } from '../utils/random';
-import type { Bar } from './bar';
 import type { Gangster, GangsterId } from './gangster';
 
 export interface Randomizer {
@@ -26,6 +25,4 @@ export interface GameContext {
     rules: Rules;
 
     gangster(id: GangsterId): Gangster;
-
-    replaceBar(bar: Bar): void;
 }

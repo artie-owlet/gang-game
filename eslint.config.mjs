@@ -36,6 +36,12 @@ export default tseslint.config(
                     ignoreArrowShorthand: true,
                 },
             ],
+            '@typescript-eslint/no-empty-function': [
+                'error',
+                {
+                    allow: ['overrideMethods'],
+                },
+            ],
             '@typescript-eslint/no-empty-interface': [
                 'error',
                 {

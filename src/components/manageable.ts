@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
-import type { GameContext } from '../game-objects/game-context';
 import type { Gangster } from '../game-objects/gangster';
+import type { WithContext } from './with-context';
 
 export const manageableSchema = ss.object({
     managerId: ss.nullable(ss.string()),
@@ -9,13 +9,11 @@ export const manageableSchema = ss.object({
 
 type ManageableData = ss.Infer<typeof manageableSchema>;
 
-export interface Manageable extends ManageableData {
+export interface Manageable extends ManageableData, WithContext {
 }
 
 export abstract class Manageable {
     public get manager(): Gangster | null {
-        return this.managerId ? this.getGangster(this.managerId) : null;
+        return this.managerId ? this.ctx.gangster(this.managerId) : null;
     }
-
-    protected abstract getGangster(...args: Parameters<GameContext['gangster']>): ReturnType<GameContext['gangster']>;
 }

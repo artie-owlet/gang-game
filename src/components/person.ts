@@ -9,7 +9,7 @@ export const photoIdSchema = defineFlavoredStringSchema('PhotoId');
 
 export type PhotoId = ss.Infer<typeof photoIdSchema>;
 
-export const genderSchema = ss.enums(['female', 'male']);
+export const genderSchema = ss.enums(['f', 'm']);
 
 export type GenderType = ss.Infer<typeof genderSchema>;
 
@@ -26,7 +26,7 @@ export interface Person extends PersonData {
 
 export abstract class Person {
     public static create(randomizer: Randomizer): PersonData {
-        const gender = randomBool([1, 1], randomizer.rng) ? 'female' : 'male';
+        const gender = randomBool([1, 1], randomizer.rng) ? 'f' : 'm';
         return {
             gender,
             personName: randomizer.personName(gender),

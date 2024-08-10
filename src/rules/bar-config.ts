@@ -4,7 +4,7 @@ import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import { defineBuildingUpgradeSchema } from './building-upgrade';
 import { resourceTypeSchema } from './resource-config';
 
-export const barTypeSchema = defineFlavoredStringSchema('BarBuildingType');
+export const barTypeSchema = defineFlavoredStringSchema('BarType');
 
 export type BarType = ss.Infer<typeof barTypeSchema>;
 

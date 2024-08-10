@@ -1,28 +1,30 @@
 import ss from 'superstruct';
 
 import type { defineBuildingUpgradeSchema } from '../rules/building-upgrade';
+import { defineFlavoredStringSchema, type FlavoredString } from '../utils/flavored-string';
 import type { Building } from './building';
 import type { ResourceStorage } from './resource-storage';
 import type { Wallet } from './wallet';
 
-export const buildingUpgradeableSchema = ss.object({
-    type: ss.string(),
-    upgradeCountDown: ss.number(),
-});
-
-type BuildingUpgradeableData = ss.Infer<typeof buildingUpgradeableSchema>;
-
-export interface BuildingUpgradeable extends BuildingUpgradeableData, Building, ResourceStorage, Wallet {
+export function defineBuildingUpgradeableSchema<T extends string>(typename: T) {
+    return ss.object({
+        type: defineFlavoredStringSchema(typename),
+        upgradeCountDown: ss.number(),
+    });
 }
 
-export type BuildingUpgradeChanges = Pick<BuildingUpgradeable, 'type' | 'upgradeCountDown'>;
+type BuildingUpgradeableData<T extends string> = ss.Infer<ReturnType<typeof defineBuildingUpgradeableSchema<T>>>;
 
-export abstract class BuildingUpgradeable {
+export interface BuildingUpgradeable<T extends string> extends
+    BuildingUpgradeableData<T>, Building, ResourceStorage, Wallet {
+}
+
+export abstract class BuildingUpgradeable<T extends string> {
     public get isUnderConstruction(): boolean {
         return this.upgradeCountDown > 0;
     }
 
-    public canUpgradeBuilding(toType: string): boolean {
+    public canUpgradeBuilding(toType: FlavoredString<T>): boolean {
         const upgrade = this.getBuildingUpgrades().find((up) => up.toType === toType);
         if (!upgrade) {
             return false;
@@ -38,7 +40,7 @@ export abstract class BuildingUpgradeable {
         return true;
     }
 
-    public upgradeBuilding(toType: string): void {
+    public upgradeBuilding(toType: FlavoredString<T>): void {
         if (!this.canUpgradeBuilding(toType)) {
             throw new Error(`Cannot upgrade building to type ${toType}`);
         }
@@ -47,14 +49,10 @@ export abstract class BuildingUpgradeable {
         const upgrade = this.getBuildingUpgrades().find((up) => up.toType === toType)!;
         this.takeMoney(upgrade.money);
         upgrade.resources.forEach((up) => this.takeResource(up.resourceType, up.amount));
-
-        this.replaceBuilding({
-            type: toType,
-            upgradeCountDown: upgrade.time,
-        });
+        this.onUpgrade();
     }
 
-    protected abstract getBuildingUpgrades(): ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<string>>>[];
+    protected abstract getBuildingUpgrades(): ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<T>>>[];
 
-    protected abstract replaceBuilding(changes: BuildingUpgradeChanges): void;
+    protected abstract onUpgrade(): void;
 }
