@@ -7,7 +7,6 @@ import {
 } from '../components/building-upgradeable';
 import { Manageable, manageableSchema } from '../components/manageable';
 import { ResourceStorage, resourceStorageSchema } from '../components/resource-storage';
-import type { Updateable } from '../components/updateable';
 import { Wallet, walletSchema } from '../components/wallet';
 import { barTypeSchema, type BarConfig, type BarUpgrade } from '../rules/bar-config';
 import { GangsterPerks } from '../rules/gangster-perks-config';
@@ -41,7 +40,7 @@ export class Bar extends new GameObjectFactory(
     Wallet,
     Manageable,
     BuildingUpgradeable<'BarType'>,
-).create<BarData>() implements Updateable {
+).create<BarData>() {
     public constructor(data: BarData, ctx: GameContext) {
         super(data, ctx);
     }
@@ -56,6 +55,10 @@ export class Bar extends new GameObjectFactory(
 
         this.config.goods.forEach(({ resourceType, salesAmount }) => {
             const maxAmount = this.getResourceAmount(resourceType);
+            if (maxAmount === 0) {
+                return;
+            }
+
             const amount = salesAmount * amountMult;
             const price = this.ctx.rules.resourceConfig(resourceType).price * priceMult;
             if (amount > maxAmount) {

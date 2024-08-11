@@ -14,3 +14,5 @@ export function defineBuildingUpgradeSchema<T extends string>(toType: ss.Struct<
         time: ss.number(),
     });
 }
+
+export type BuildingUpgrade<T extends string> = ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<T>>>;

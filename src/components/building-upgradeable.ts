@@ -1,6 +1,7 @@
 import ss from 'superstruct';
 
-import type { defineBuildingUpgradeSchema } from '../rules/building-upgrade';
+import type { BuildingUpgrade } from '../rules/building-upgrade';
+import { updateComponent } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema, type FlavoredString } from '../utils/flavored-string';
 import type { Building } from './building';
 import type { ResourceStorage } from './resource-storage';
@@ -52,7 +53,13 @@ export abstract class BuildingUpgradeable<T extends string> {
         this.onUpgrade();
     }
 
-    protected abstract getBuildingUpgrades(): ss.Infer<ReturnType<typeof defineBuildingUpgradeSchema<T>>>[];
+    public [updateComponent](): void {
+        if (this.upgradeCountDown > 0) {
+            --this.upgradeCountDown;
+        }
+    }
+
+    protected abstract getBuildingUpgrades(): BuildingUpgrade<T>[];
 
     protected abstract onUpgrade(): void;
 }
