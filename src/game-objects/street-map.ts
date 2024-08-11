@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { Direction } from '../types/direction';
+import { Direction } from '../common-type-schemas/direction';
 import { GameObjectFactory } from '../utils/create-game-object-class';
 import type { Rng } from '../utils/random';
 

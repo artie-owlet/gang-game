@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
-import type { Odds } from '../types/odds-schema';
-import type { WeightedSet } from '../types/weighted-set';
+import type { Odds } from '../common-type-schemas/odds-schema';
+import type { WeightedSet } from '../common-type-schemas/weighted-set';
 import type { FlavoredString } from './flavored-string';
 
 export interface Rng {

@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { weightedSetSchema } from '../types/weighted-set';
+import { weightedSetSchema } from '../common-type-schemas/weighted-set';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 
 export const resourceTypeSchema = defineFlavoredStringSchema('ResourceType');

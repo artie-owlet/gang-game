@@ -1,5 +1,6 @@
 import type { GenderType, PhotoId } from '../components/person';
 import type { BarConfig, BarType } from '../rules/bar-config';
+import type { GangsterPerksConfig } from '../rules/gangster-perks-config';
 import type { ResourceConfig, ResourceType } from '../rules/resource-config';
 import type { Rng } from '../utils/random';
 import type { Gangster, GangsterId } from './gangster';
@@ -13,6 +14,7 @@ export interface Randomizer {
 export interface Rules {
     // generalConfig: Readonly<GeneralConfig>;
     barConfig(barType: BarType): Readonly<BarConfig>;
+    gangsterPerksConfig: Readonly<GangsterPerksConfig>;
     // productionBuildingConfig(productionBuildingType: ProductionBuildingType): Readonly<ProductionBuildingConfig>;
     // productionReceipe(productionBuildingType: ProductionBuildingType, receipeId: number): Readonly<ProductionReceipe>;
     resourceConfig(resourceType: ResourceType): Readonly<ResourceConfig>;

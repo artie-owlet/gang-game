@@ -10,6 +10,7 @@ import { ResourceStorage, resourceStorageSchema } from '../components/resource-s
 import type { Updateable } from '../components/updateable';
 import { Wallet, walletSchema } from '../components/wallet';
 import { barTypeSchema, type BarConfig, type BarUpgrade } from '../rules/bar-config';
+import { GangsterPerks } from '../rules/gangster-perks-config';
 import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import type { GameContext } from './game-context';
@@ -50,9 +51,13 @@ export class Bar extends new GameObjectFactory(
             return;
         }
 
-        this.config.goods.forEach(({ resourceType, amount }) => {
+        const amountMult = 1 + this.getManagerPerkValue(GangsterPerks.barAmountAdd);
+        const priceMult = 1 + this.config.priceAdd + this.getManagerPerkValue(GangsterPerks.barPriceAdd);
+
+        this.config.goods.forEach(({ resourceType, salesAmount }) => {
             const maxAmount = this.getResourceAmount(resourceType);
-            const price = this.ctx.rules.resourceConfig(resourceType).price * this.config.priceMult;
+            const amount = salesAmount * amountMult;
+            const price = this.ctx.rules.resourceConfig(resourceType).price * priceMult;
             if (amount > maxAmount) {
                 this.takeResource(resourceType, maxAmount);
                 this.addMoney(maxAmount * price);

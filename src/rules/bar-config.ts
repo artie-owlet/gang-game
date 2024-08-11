@@ -14,10 +14,10 @@ export type BarUpgrade = ss.Infer<typeof barUpgradeSchema>;
 
 export const barConfigSchema = ss.object({
     type: barTypeSchema,
-    priceMult: ss.number(),
+    priceAdd: ss.number(),
     goods: ss.array(ss.object({
         resourceType: resourceTypeSchema,
-        amount: ss.number(),
+        salesAmount: ss.number(),
     })),
     upgrades: ss.array(barUpgradeSchema),
 });

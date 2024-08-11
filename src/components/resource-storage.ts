@@ -27,14 +27,6 @@ export abstract class ResourceStorage {
         }, 0);
     }
 
-    public canAddAmount(resourceType: ResourceType): number {
-        return (this.storageCapacity - this.storageTotalSize) / this.getResourceUnitSize(resourceType);
-    }
-
-    public canAddUnits(resourceType: ResourceType): number {
-        return this.canAddAmount(resourceType) | 0;
-    }
-
     public getResourceAmount(resourceType: ResourceType): number {
         const item = this.storageItems.find((it) => it.resourceType === resourceType);
         if (!item) {
@@ -43,16 +35,20 @@ export abstract class ResourceStorage {
         return item.amount;
     }
 
-    public canTakeAmount(resourceType: ResourceType, amount: number): boolean {
-        return this.getResourceAmount(resourceType) >= amount;
-    }
-
     public getResourceUnits(resourceType: ResourceType): number {
         return this.getResourceAmount(resourceType) | 0;
     }
 
+    public resouceAmountCanAdd(resourceType: ResourceType): number {
+        return (this.storageCapacity - this.storageTotalSize) / this.getResourceUnitSize(resourceType);
+    }
+
+    public canTakeAmount(resourceType: ResourceType, amount: number): boolean {
+        return this.getResourceAmount(resourceType) >= amount;
+    }
+
     public addResource(resourceType: ResourceType, amount: number): void {
-        if (amount > this.canAddAmount(resourceType)) {
+        if (amount > this.resouceAmountCanAdd(resourceType)) {
             throw new Error(`Cannot add ${amount} of ${resourceType}`);
         }
 
