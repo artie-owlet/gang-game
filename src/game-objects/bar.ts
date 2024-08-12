@@ -4,11 +4,11 @@ import { Building, buildingSchema } from '../components/building';
 import {
     BuildingUpgradeable,
     defineBuildingUpgradeableSchema,
-} from '../components/building-upgradeable';
+} from '../components/business-upgradeable';
 import { Manageable, manageableSchema } from '../components/manageable';
 import { ResourceStorage, resourceStorageSchema } from '../components/resource-storage';
 import { Wallet, walletSchema } from '../components/wallet';
-import { barTypeSchema, type BarConfig, type BarUpgrade } from '../rules/bar-config';
+import { barTypeSchema, type BarConfig, type BarType, type BarUpgrade } from '../rules/bar-config';
 import { GangsterPerks } from '../rules/gangster-perks-config';
 import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
@@ -71,8 +71,8 @@ export class Bar extends new GameObjectFactory(
         });
     }
 
-    protected override getBuildingUpgrades(): BarUpgrade[] {
-        return this.config.upgrades;
+    protected override getBusinessUpgrade(type: BarType): BarUpgrade {
+        return this.ctx.rules.barConfig(type);
     }
 
     protected override onUpgrade(): void {

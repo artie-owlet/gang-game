@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import type { BuildingUpgrade } from '../rules/building-upgrade';
+import { businessUpgradeCost, type BusinessUpgrade } from '../rules/business-upgrade';
 import { updateComponent } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema, type FlavoredString } from '../utils/flavored-string';
 import type { Building } from './building';
@@ -26,15 +26,18 @@ export abstract class BuildingUpgradeable<T extends string> {
     }
 
     public canUpgradeBuilding(toType: FlavoredString<T>): boolean {
-        const upgrade = this.getBuildingUpgrades().find((up) => up.toType === toType);
-        if (!upgrade) {
+        const current = this.getBusinessUpgrade(this.type);
+        if (!current.upgrades.includes(toType)) {
             return false;
         }
 
-        if (this.money < upgrade.money) {
+        const target = this.getBusinessUpgrade(toType);
+
+        const upgradeCost = businessUpgradeCost(current.buildingCost, target.buildingCost);
+        if (this.money < upgradeCost.money) {
             return false;
         }
-        if (upgrade.resources.some((res) => !this.canTakeAmount(res.resourceType, res.amount))) {
+        if (upgradeCost.resources.some((res) => !this.canTakeAmount(res.resourceType, res.amount))) {
             return false;
         }
 
@@ -46,10 +49,12 @@ export abstract class BuildingUpgradeable<T extends string> {
             throw new Error(`Cannot upgrade building to type ${toType}`);
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const upgrade = this.getBuildingUpgrades().find((up) => up.toType === toType)!;
-        this.takeMoney(upgrade.money);
-        upgrade.resources.forEach((up) => this.takeResource(up.resourceType, up.amount));
+        const current = this.getBusinessUpgrade(this.type);
+        const target = this.getBusinessUpgrade(toType);
+
+        const upgradeCost = businessUpgradeCost(current.buildingCost, target.buildingCost);
+        this.takeMoney(upgradeCost.money);
+        upgradeCost.resources.forEach((up) => this.takeResource(up.resourceType, up.amount));
         this.onUpgrade();
     }
 
@@ -59,7 +64,7 @@ export abstract class BuildingUpgradeable<T extends string> {
         }
     }
 
-    protected abstract getBuildingUpgrades(): BuildingUpgrade<T>[];
+    protected abstract getBusinessUpgrade(type: FlavoredString<T>): BusinessUpgrade<T>;
 
     protected abstract onUpgrade(): void;
 }
