@@ -1,6 +1,7 @@
 import type { GenderType, PhotoId } from '../components/person';
 import type { BarConfig, BarType } from '../rules/bar-config';
 import type { GangsterPerksConfig } from '../rules/gangster-perks-config';
+import type { ProductionConfig, ProductionType } from '../rules/production-config';
 import type { ResourceConfig, ResourceType } from '../rules/resource-config';
 import type { Rng } from '../utils/random';
 import type { Gangster, GangsterId } from './gangster';
@@ -13,13 +14,17 @@ export interface Randomizer {
 
 export interface Rules {
     // generalConfig: Readonly<GeneralConfig>;
-    barConfig(barType: BarType): Readonly<BarConfig>;
+
     gangsterPerksConfig: Readonly<GangsterPerksConfig>;
-    // productionBuildingConfig(productionBuildingType: ProductionBuildingType): Readonly<ProductionBuildingConfig>;
-    // productionReceipe(productionBuildingType: ProductionBuildingType, receipeId: number): Readonly<ProductionReceipe>;
+
+    barConfigs: Record<BarType, Readonly<BarConfig>>;
+    barConfig(barType: BarType): Readonly<BarConfig>;
+
+    productionConfigs: Record<ProductionType, Readonly<ProductionConfig>>;
+    productionConfig(productionType: ProductionType): Readonly<ProductionConfig>;
+
+    resourceConfigs: Record<ResourceType, Readonly<ResourceConfig>>;
     resourceConfig(resourceType: ResourceType): Readonly<ResourceConfig>;
-    // traderConfig(traderType: TraderType): Readonly<TraderConfig>;
-    // vehicleConfig(vehicleType: VehicleType): Readonly<VehicleConfig>;
 }
 
 export interface GameContext {

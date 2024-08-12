@@ -14,12 +14,8 @@ export type BarUpgrade = ss.Infer<typeof barUpgradeSchema>;
 
 export const barConfigSchema = ss.intersection([
     ss.object({
-        type: barTypeSchema,
-        priceAdd: ss.number(),
-        goods: ss.array(ss.object({
-            resourceType: resourceTypeSchema,
-            salesAmount: ss.number(),
-        })),
+        goodsSalesAmount: ss.record(resourceTypeSchema, ss.number()),
+        priceMultAdd: ss.number(),
     }),
     barUpgradeSchema,
 ]);

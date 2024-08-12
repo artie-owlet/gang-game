@@ -1,8 +1,11 @@
 import ss from 'superstruct';
 
 export enum GangsterPerks {
-    barAmountAdd = 'barAmountAdd',
-    barPriceAdd = 'barPriceAdd',
+    barAmountMultAdd = 'barAmountMultAdd',
+    barPriceMultAdd = 'barPriceMultAdd',
+    prodInputsAmountMultSub = 'prodInputsAmountMultSub',
+    prodProductAmountMultAdd = 'prodProductAmountMultAdd',
+    prodTimeValueSub = 'prodTimeValueSub',
 }
 
 export const gangsterPerksSchema = ss.enums(Object.values(GangsterPerks));

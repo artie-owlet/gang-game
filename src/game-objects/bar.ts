@@ -12,6 +12,7 @@ import { barTypeSchema, type BarConfig, type BarType, type BarUpgrade } from '..
 import { GangsterPerks } from '../rules/gangster-perks-config';
 import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { recordEntries } from '../utils/record-utils';
 import type { GameContext } from './game-context';
 
 export const barIdSchema = defineFlavoredStringSchema('BarId');
@@ -50,10 +51,10 @@ export class Bar extends new GameObjectFactory(
             return;
         }
 
-        const amountMult = 1 + this.getManagerPerkValue(GangsterPerks.barAmountAdd);
-        const priceMult = 1 + this.config.priceAdd + this.getManagerPerkValue(GangsterPerks.barPriceAdd);
+        const amountMult = 1 + this.getManagerPerkValue(GangsterPerks.barAmountMultAdd);
+        const priceMult = 1 + this.config.priceMultAdd + this.getManagerPerkValue(GangsterPerks.barPriceMultAdd);
 
-        this.config.goods.forEach(({ resourceType, salesAmount }) => {
+        recordEntries(this.config.goodsSalesAmount).forEach(([resourceType, salesAmount]) => {
             const maxAmount = this.getResourceAmount(resourceType);
             if (maxAmount === 0) {
                 return;

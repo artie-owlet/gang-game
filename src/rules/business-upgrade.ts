@@ -25,6 +25,6 @@ export function businessUpgradeCost(from: BusinessBuildingCost, to: BusinessBuil
     return {
         money,
         resources,
-        time: to.time,
+        buildingTime: to.buildingTime,
     };
 }

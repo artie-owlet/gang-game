@@ -55,6 +55,8 @@ export abstract class BuildingUpgradeable<T extends string> {
         const upgradeCost = businessUpgradeCost(current.buildingCost, target.buildingCost);
         this.takeMoney(upgradeCost.money);
         upgradeCost.resources.forEach((up) => this.takeResource(up.resourceType, up.amount));
+        this.upgradeCountDown = upgradeCost.buildingTime;
+
         this.onUpgrade();
     }
 

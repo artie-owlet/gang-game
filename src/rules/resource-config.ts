@@ -8,7 +8,6 @@ export const resourceTypeSchema = defineFlavoredStringSchema('ResourceType');
 export type ResourceType = ss.Infer<typeof resourceTypeSchema>;
 
 const resourceConfigSchema = ss.object({
-    type: resourceTypeSchema,
     price: ss.number(),
     size: ss.number(),
     legal: ss.boolean(),

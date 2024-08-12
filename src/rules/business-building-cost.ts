@@ -8,7 +8,7 @@ export const businessBuildingCostSchema = ss.object({
         resourceType: resourceTypeSchema,
         amount: ss.number(),
     })),
-    time: ss.number(),
+    buildingTime: ss.number(),
 });
 
 export type BusinessBuildingCost = ss.Infer<typeof businessBuildingCostSchema>;
