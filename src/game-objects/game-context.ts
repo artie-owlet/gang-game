@@ -3,6 +3,7 @@ import type { BarConfig, BarType } from '../rules/bar-config';
 import type { GangsterPerksConfig } from '../rules/gangster-perks-config';
 import type { GeneralConfig } from '../rules/general-config';
 import type { ProductionConfig, ProductionType } from '../rules/production-config';
+import type { RelationshipsConfig } from '../rules/relationships-config';
 import type { ResourceConfig, ResourceType } from '../rules/resource-config';
 import type { Rng } from '../utils/random';
 import type { Gangster, GangsterId } from './gangster';
@@ -17,6 +18,8 @@ export interface Rules {
     generalConfig: Readonly<GeneralConfig>;
 
     gangsterPerksConfig: Readonly<GangsterPerksConfig>;
+    relationshipsConfig: Readonly<RelationshipsConfig>;
+    relationshipsLimitCurve: readonly number[];
 
     barConfigs: Record<BarType, Readonly<BarConfig>>;
     barConfig(barType: BarType): Readonly<BarConfig>;
