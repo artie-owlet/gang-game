@@ -62,7 +62,7 @@ export class Production extends new GameObjectFactory(
         if (this.currentReceipe) {
             --this.countDown;
             if (this.countDown === 0) {
-                const maxAmount = this.resouceAmountCanAdd(this.currentReceipe.product);
+                const maxAmount = this.resourceAmountCanAdd(this.currentReceipe.product);
                 const amount = this.currentReceipe.amount *
                     (1 + this.getManagerPerkValue(GangsterPerks.prodProductAmountMultAdd));
                 if (amount > maxAmount) {
@@ -96,6 +96,8 @@ export class Production extends new GameObjectFactory(
     }
 
     protected override onUpgrade(): void {
+        this.currentReceipeType = null;
+        this.countDown = 0;
     }
 
     private get config(): ProductionConfig {

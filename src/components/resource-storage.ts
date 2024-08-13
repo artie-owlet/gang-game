@@ -39,7 +39,7 @@ export abstract class ResourceStorage {
         return this.getResourceAmount(resourceType) | 0;
     }
 
-    public resouceAmountCanAdd(resourceType: ResourceType): number {
+    public resourceAmountCanAdd(resourceType: ResourceType): number {
         return (this.storageCapacity - this.storageTotalSize) / this.getResourceUnitSize(resourceType);
     }
 
@@ -48,7 +48,7 @@ export abstract class ResourceStorage {
     }
 
     public addResource(resourceType: ResourceType, amount: number): void {
-        if (amount > this.resouceAmountCanAdd(resourceType)) {
+        if (amount > this.resourceAmountCanAdd(resourceType)) {
             throw new Error(`Cannot add ${amount} of ${resourceType}`);
         }
 
