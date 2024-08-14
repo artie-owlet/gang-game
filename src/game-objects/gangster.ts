@@ -5,8 +5,8 @@ import { WithContext } from '../components/with-context';
 import { gangsterPerksSchema, type GangsterPerks } from '../rules/gangster-perks-config';
 import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { JsonMap } from '../utils/json-tools';
 import { generateId } from '../utils/random';
-import { ssPartialRecord } from '../utils/ss-custom-types';
 import type { Randomizer } from './game-context';
 
 export const gangsterIdSchema = defineFlavoredStringSchema('GangsterId');
@@ -15,7 +15,7 @@ export type GangsterId = ss.Infer<typeof gangsterIdSchema>;
 
 const gangsterPrivateSchema = ss.object({
     id: gangsterIdSchema,
-    perks: ssPartialRecord(gangsterPerksSchema, ss.number()),
+    perks: ss.map(gangsterPerksSchema, ss.number()),
 });
 
 export const gangsterSchema = ss.intersection([
@@ -29,13 +29,13 @@ export class Gangster extends new GameObjectFactory(Person, WithContext).create<
     public static create(randomizer: Randomizer): GangsterData {
         return {
             id: generateId(),
-            perks: {},
+            perks: new JsonMap<GangsterPerks, number>(),
             ...Person.create(randomizer),
         };
     }
 
     public getPerkValue(perk: GangsterPerks): number {
-        const perkLevel = this.perks[perk];
+        const perkLevel = this.perks.get(perk);
         if (perkLevel === undefined) {
             return 0;
         }

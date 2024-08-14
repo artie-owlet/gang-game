@@ -2,8 +2,7 @@ import ss from 'superstruct';
 
 import { relsEventTypeSchema, type RelsEventType } from '../rules/relationships-config';
 import { updateComponent } from '../utils/create-game-object-class';
-import { partialRecordEntries, recordValue } from '../utils/record-utils';
-import { ssPartialRecord } from '../utils/ss-custom-types';
+import { recordValue } from '../utils/record-utils';
 import type { WithContext } from './with-context';
 
 /**
@@ -31,7 +30,7 @@ export function calcRelationshipsLimitCurve(r0: number, f0: number): number[] {
 export const relationshipsSchema = ss.object({
     respect: ss.number(),
     fear: ss.number(),
-    relsEventsCountDown: ssPartialRecord(relsEventTypeSchema, ss.number()),
+    relsEventsCountDown: ss.map(relsEventTypeSchema, ss.number()),
 });
 
 export interface Relationships extends ss.Infer<typeof relationshipsSchema>, WithContext {
@@ -39,17 +38,16 @@ export interface Relationships extends ss.Infer<typeof relationshipsSchema>, Wit
 
 export abstract class Relationships {
     public setRelsEvent(eventType: RelsEventType): void {
-        this.relsEventsCountDown[eventType] = recordValue(this.ctx.rules.relationshipsConfig, eventType).time;
+        this.relsEventsCountDown.set(eventType, recordValue(this.ctx.rules.relationshipsConfig, eventType).time);
         this.refreshRelsValue();
     }
 
     public [updateComponent](): void {
-        partialRecordEntries(this.relsEventsCountDown).forEach(([eventType, countDown]) => {
+        this.relsEventsCountDown.forEach((countDown, eventType) => {
             if (countDown === 1) {
-                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-                delete this.relsEventsCountDown[eventType];
+                this.relsEventsCountDown.delete(eventType);
             } else {
-                this.relsEventsCountDown[eventType] = countDown - 1;
+                this.relsEventsCountDown.set(eventType, countDown - 1);
             }
         });
         this.refreshRelsValue();
