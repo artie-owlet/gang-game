@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
 import { relsEventTypeSchema, type RelsEventType } from '../rules/relationships-config';
-import { updateComponent } from '../utils/create-game-object-class';
+import { updateComponent } from '../utils/game-object-class-factory';
 import { recordValue } from '../utils/record-utils';
 import type { WithContext } from './with-context';
 

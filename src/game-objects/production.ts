@@ -16,8 +16,8 @@ import {
     type ProductionUpgrade,
 } from '../rules/production-config';
 import { productionReceipeTypeSchema, type ProductionReceipe } from '../rules/production-recipe';
-import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { recordEntries, recordValue } from '../utils/record-utils';
 import type { GameContext } from './game-context';
 
@@ -43,7 +43,7 @@ export const productionSchema = ss.intersection([
 
 type ProductionData = ss.Infer<typeof productionSchema>;
 
-export class Production extends new GameObjectFactory(
+export class Production extends new GameObjectClassFactory(
     Building,
     ResourceStorage,
     Wallet,

@@ -5,6 +5,7 @@ import type { GeneralConfig } from '../rules/general-config';
 import type { ProductionConfig, ProductionType } from '../rules/production-config';
 import type { RelationshipsConfig } from '../rules/relationships-config';
 import type { ResourceConfig, ResourceType } from '../rules/resource-config';
+import type { TraderConfig, TraderType } from '../rules/trader-config';
 import type { Rng } from '../utils/random';
 import type { Gangster, GangsterId } from './gangster';
 
@@ -29,6 +30,9 @@ export interface Rules {
 
     resourceConfigs: Record<ResourceType, Readonly<ResourceConfig>>;
     resourceConfig(resourceType: ResourceType): Readonly<ResourceConfig>;
+
+    traderConfigs: Record<TraderType, Readonly<TraderConfig>>;
+    traderConfig(traderType: TraderType): Readonly<TraderConfig>;
 }
 
 export interface GameContext {

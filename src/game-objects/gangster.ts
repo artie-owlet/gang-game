@@ -3,8 +3,8 @@ import ss from 'superstruct';
 import { Person, personSchema } from '../components/person';
 import { WithContext } from '../components/with-context';
 import { gangsterPerksSchema, type GangsterPerks } from '../rules/gangster-perks-config';
-import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { JsonMap } from '../utils/json-tools';
 import { generateId } from '../utils/random';
 import type { Randomizer } from './game-context';
@@ -25,7 +25,7 @@ export const gangsterSchema = ss.intersection([
 
 type GangsterData = ss.Infer<typeof gangsterSchema>;
 
-export class Gangster extends new GameObjectFactory(Person, WithContext).create<GangsterData>() {
+export class Gangster extends new GameObjectClassFactory(Person, WithContext).create<GangsterData>() {
     public static create(randomizer: Randomizer): GangsterData {
         return {
             id: generateId(),

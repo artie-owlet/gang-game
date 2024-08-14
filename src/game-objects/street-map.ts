@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
 import { Direction } from '../common-type-schemas/direction';
-import { GameObjectFactory } from '../utils/create-game-object-class';
+import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import type { Rng } from '../utils/random';
 
 // east (=1) and north (=2) borders of corner
@@ -56,7 +56,7 @@ function isVertBorder(mask: BorderMask): boolean {
     return Boolean(mask & 2);
 }
 
-export class StreetMap extends new GameObjectFactory().create<StreetMapData>() {
+export class StreetMap extends new GameObjectClassFactory().create<StreetMapData>() {
     // TODO: Implement different move speed for unexplored and occupied corners
     public getRoute(from: number, to: number): Direction[] {
         let routes: Route[] = [{

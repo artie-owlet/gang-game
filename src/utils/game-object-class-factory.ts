@@ -21,9 +21,10 @@ type GameObjectType<D, C extends Ctor[]> = HasContext<InstanceTypeArray<C>> exte
         D & Intersection<InstanceTypeArray<C>> & { updateComponents(): void }
 );
 
+export const initComponent = Symbol('initComponent');
 export const updateComponent = Symbol('updateComponent');
 
-export class GameObjectFactory<C extends Ctor[]> {
+export class GameObjectClassFactory<C extends Ctor[]> {
     private Comps: Ctor[];
 
     public constructor(...Comps: C) {
@@ -32,11 +33,14 @@ export class GameObjectFactory<C extends Ctor[]> {
 
     public create<D>(): GameObjectType<D, C> {
         abstract class Base {
+            public static initializableComponents: string[] = [];
+            public static updateableComponents: string[] = [];
+
             public constructor(data: D, public ctx: unknown) {
                 Object.assign(this, data);
-            }
 
-            public static updateableComponents: string[] = [];
+                this.initComponents();
+            }
 
             public updateComponents(): void {
                 Base.updateableComponents.forEach((name) => {
@@ -44,6 +48,15 @@ export class GameObjectFactory<C extends Ctor[]> {
                     // @ts-ignore
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                     this[`update${name}`]();
+                });
+            }
+
+            private initComponents(): void {
+                Base.updateableComponents.forEach((name) => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                    this[`init${name}`]();
                 });
             }
         }
@@ -55,6 +68,12 @@ export class GameObjectFactory<C extends Ctor[]> {
                 if (prop && key !== 'constructor') {
                     Object.defineProperty(Base.prototype, key, prop);
                 }
+            }
+
+            const init = Object.getOwnPropertyDescriptor(Comp.prototype, updateComponent);
+            if (init) {
+                Base.initializableComponents.push(Comp.name);
+                Object.defineProperty(Base.prototype, `init${Comp.name}`, init);
             }
 
             const update = Object.getOwnPropertyDescriptor(Comp.prototype, updateComponent);

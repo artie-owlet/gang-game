@@ -10,8 +10,8 @@ import { ResourceStorage, resourceStorageSchema } from '../components/resource-s
 import { Wallet, walletSchema } from '../components/wallet';
 import { barTypeSchema, type BarConfig, type BarType, type BarUpgrade } from '../rules/bar-config';
 import { GangsterPerks } from '../rules/gangster-perks-config';
-import { GameObjectFactory } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { recordEntries } from '../utils/record-utils';
 import type { GameContext } from './game-context';
 
@@ -35,7 +35,7 @@ export const barSchema = ss.intersection([
 
 type BarData = ss.Infer<typeof barSchema>;
 
-export class Bar extends new GameObjectFactory(
+export class Bar extends new GameObjectClassFactory(
     Building,
     ResourceStorage,
     Wallet,

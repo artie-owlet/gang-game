@@ -1,8 +1,8 @@
 import ss from 'superstruct';
 
 import { businessUpgradeCost, type BusinessUpgrade } from '../rules/business-upgrade';
-import { updateComponent } from '../utils/create-game-object-class';
 import { defineFlavoredStringSchema, type FlavoredString } from '../utils/flavored-string';
+import { updateComponent } from '../utils/game-object-class-factory';
 import type { Building } from './building';
 import type { ResourceStorage } from './resource-storage';
 import type { Wallet } from './wallet';
