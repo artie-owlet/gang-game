@@ -7,20 +7,20 @@ import type { Building } from './building';
 import type { ResourceStorage } from './resource-storage';
 import type { Wallet } from './wallet';
 
-export function defineBuildingUpgradeableSchema<T extends string>(typename: T) {
+export function defineBusinessUpgradeableSchema<T extends string>(businessTypeTypename: T) {
     return ss.object({
-        type: defineFlavoredStringSchema(typename),
+        type: defineFlavoredStringSchema(businessTypeTypename),
         upgradeCountDown: ss.number(),
     });
 }
 
-type BuildingUpgradeableData<T extends string> = ss.Infer<ReturnType<typeof defineBuildingUpgradeableSchema<T>>>;
+type BusinessUpgradeableData<T extends string> = ss.Infer<ReturnType<typeof defineBusinessUpgradeableSchema<T>>>;
 
-export interface BuildingUpgradeable<T extends string> extends
-    BuildingUpgradeableData<T>, Building, ResourceStorage, Wallet {
+export interface BusinessUpgradeable<T extends string> extends
+    BusinessUpgradeableData<T>, Building, ResourceStorage, Wallet {
 }
 
-export abstract class BuildingUpgradeable<T extends string> {
+export abstract class BusinessUpgradeable<T extends string> {
     public get isUnderConstruction(): boolean {
         return this.upgradeCountDown > 0;
     }
@@ -44,7 +44,7 @@ export abstract class BuildingUpgradeable<T extends string> {
         return true;
     }
 
-    public upgradeBuilding(toType: FlavoredString<T>): void {
+    public upgradeBusiness(toType: FlavoredString<T>): void {
         if (!this.canUpgradeBuilding(toType)) {
             throw new Error(`Cannot upgrade building to type ${toType}`);
         }

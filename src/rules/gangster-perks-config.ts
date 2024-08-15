@@ -6,6 +6,7 @@ export enum GangsterPerks {
     prodInputsAmountMultSub = 'prodInputsAmountMultSub',
     prodProductAmountMultAdd = 'prodProductAmountMultAdd',
     prodTimeValueSub = 'prodTimeValueSub',
+    driverDrivePointsAddValue = 'driverDrivePointsAddValue',
 }
 
 export const gangsterPerksSchema = ss.enums(Object.values(GangsterPerks));

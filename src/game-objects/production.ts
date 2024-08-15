@@ -2,8 +2,8 @@ import ss from 'superstruct';
 
 import { Building, buildingSchema } from '../components/building';
 import {
-    BuildingUpgradeable,
-    defineBuildingUpgradeableSchema,
+    BusinessUpgradeable,
+    defineBusinessUpgradeableSchema,
 } from '../components/business-upgradeable';
 import { Manageable, manageableSchema } from '../components/manageable';
 import { ResourceStorage, resourceStorageSchema } from '../components/resource-storage';
@@ -19,7 +19,6 @@ import { productionReceipeTypeSchema, type ProductionReceipe } from '../rules/pr
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { recordEntries, recordValue } from '../utils/record-utils';
-import type { GameContext } from './game-context';
 
 export const productionIdSchema = defineFlavoredStringSchema('ProductionId');
 
@@ -38,21 +37,17 @@ export const productionSchema = ss.intersection([
     resourceStorageSchema,
     walletSchema,
     manageableSchema,
-    defineBuildingUpgradeableSchema('ProductionType'),
+    defineBusinessUpgradeableSchema('ProductionType'),
 ]);
-
-type ProductionData = ss.Infer<typeof productionSchema>;
 
 export class Production extends new GameObjectClassFactory(
     Building,
     ResourceStorage,
     Wallet,
     Manageable,
-    BuildingUpgradeable<'ProductionType'>,
-).create<ProductionData>() {
-    public constructor(data: ProductionData, ctx: GameContext) {
-        super(data, ctx);
-    }
+    BusinessUpgradeable<'ProductionType'>,
+).create<ss.Infer<typeof productionSchema>>() {
+    // NOTE: Don't add Production.create() - Production can be created only by upgrading EmptyBuilding
 
     public update(): void {
         if (this.isUnderConstruction) {

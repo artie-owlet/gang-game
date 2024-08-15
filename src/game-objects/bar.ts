@@ -2,8 +2,8 @@ import ss from 'superstruct';
 
 import { Building, buildingSchema } from '../components/building';
 import {
-    BuildingUpgradeable,
-    defineBuildingUpgradeableSchema,
+    BusinessUpgradeable,
+    defineBusinessUpgradeableSchema,
 } from '../components/business-upgradeable';
 import { Manageable, manageableSchema } from '../components/manageable';
 import { ResourceStorage, resourceStorageSchema } from '../components/resource-storage';
@@ -13,7 +13,6 @@ import { GangsterPerks } from '../rules/gangster-perks-config';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { recordEntries } from '../utils/record-utils';
-import type { GameContext } from './game-context';
 
 export const barIdSchema = defineFlavoredStringSchema('BarId');
 
@@ -30,21 +29,17 @@ export const barSchema = ss.intersection([
     resourceStorageSchema,
     walletSchema,
     manageableSchema,
-    defineBuildingUpgradeableSchema('BarType'),
+    defineBusinessUpgradeableSchema('BarType'),
 ]);
-
-type BarData = ss.Infer<typeof barSchema>;
 
 export class Bar extends new GameObjectClassFactory(
     Building,
     ResourceStorage,
     Wallet,
     Manageable,
-    BuildingUpgradeable<'BarType'>,
-).create<BarData>() {
-    public constructor(data: BarData, ctx: GameContext) {
-        super(data, ctx);
-    }
+    BusinessUpgradeable<'BarType'>,
+).create<ss.Infer<typeof barSchema>>() {
+    // NOTE: Don't add Bar.create() - Bar can be created only by upgrading EmptyBuilding
 
     public update(): void {
         if (this.isUnderConstruction) {

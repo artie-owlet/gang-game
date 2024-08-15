@@ -12,6 +12,7 @@ export type ResourceStorageItem = ss.Infer<typeof resourceStorageItemSchema>;
 
 export const resourceStorageSchema = ss.object({
     storageCapacity: ss.number(),
+    // FIXME: Replace with Map
     storageItems: ss.array(resourceStorageItemSchema),
 });
 
@@ -21,6 +22,13 @@ export interface ResourceStorage extends ResourceStorageData, WithContext {
 }
 
 export abstract class ResourceStorage {
+    public static create(storageCapacity: number): ResourceStorageData {
+        return {
+            storageCapacity,
+            storageItems: [],
+        };
+    }
+
     public get storageTotalSize(): number {
         return this.storageItems.reduce((acc, item) => {
             return acc + item.amount * this.getResourceUnitSize(item.resourceType);

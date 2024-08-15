@@ -6,8 +6,10 @@ import type { ProductionConfig, ProductionType } from '../rules/production-confi
 import type { RelationshipsConfig } from '../rules/relationships-config';
 import type { ResourceConfig, ResourceType } from '../rules/resource-config';
 import type { TraderConfig, TraderType } from '../rules/trader-config';
+import type { VehicleConfig, VehicleType } from '../rules/vehicle-config';
 import type { Rng } from '../utils/random';
 import type { Gangster, GangsterId } from './gangster';
+import type { StreetMap } from './street-map';
 
 export interface Randomizer {
     rng: Rng;
@@ -33,11 +35,16 @@ export interface Rules {
 
     traderConfigs: Record<TraderType, Readonly<TraderConfig>>;
     traderConfig(traderType: TraderType): Readonly<TraderConfig>;
+
+    vehicleConfigs: Record<VehicleType, Readonly<VehicleConfig>>;
+    vehicleConfig(vehicleType: VehicleType): Readonly<VehicleConfig>;
 }
 
 export interface GameContext {
     randomizer: Randomizer;
     rules: Rules;
+
+    streetMap: StreetMap;
 
     gangster(id: GangsterId): Gangster;
 }

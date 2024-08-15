@@ -10,6 +10,12 @@ export interface Wallet extends WalletData {
 }
 
 export abstract class Wallet {
+    public static create(): WalletData {
+        return {
+            money: 0,
+        };
+    }
+
     public addMoney(sum: number): void {
         this.money += sum;
     }

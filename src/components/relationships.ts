@@ -33,10 +33,20 @@ export const relationshipsSchema = ss.object({
     relsEventsCountDown: ss.map(relsEventTypeSchema, ss.number()),
 });
 
-export interface Relationships extends ss.Infer<typeof relationshipsSchema>, WithContext {
+type RelationshipsData = ss.Infer<typeof relationshipsSchema>;
+
+export interface Relationships extends RelationshipsData, WithContext {
 }
 
 export abstract class Relationships {
+    public static create(): RelationshipsData {
+        return {
+            respect: 0,
+            fear: 0,
+            relsEventsCountDown: new Map(),
+        };
+    }
+
     public setRelsEvent(eventType: RelsEventType): void {
         this.relsEventsCountDown.set(eventType, recordValue(this.ctx.rules.relationshipsConfig, eventType).time);
         this.refreshRelsValue();

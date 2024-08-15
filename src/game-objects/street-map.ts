@@ -57,6 +57,10 @@ function isVertBorder(mask: BorderMask): boolean {
 }
 
 export class StreetMap extends new GameObjectClassFactory().create<StreetMapData>() {
+    public static create(size: number, rng: Rng): StreetMap {
+        return new StreetMap(generateStreetMap(size, rng));
+    }
+
     // TODO: Implement different move speed for unexplored and occupied corners
     public getRoute(from: number, to: number): Direction[] {
         let routes: Route[] = [{
@@ -152,7 +156,7 @@ function remove(arr: number[], value: number): boolean {
     return id >= 0;
 }
 
-export function generateStreetMap(size: number, rand: Rng): StreetMap {
+export function generateStreetMap(size: number, rng: Rng): StreetMapData {
     const sizeSquare = size ** 2;
     const positions = new Array(sizeSquare).fill(0).map((_, id) => id);
     const borderMasks: BorderMask[] = new Array<BorderMask>(sizeSquare).fill(3);
@@ -208,7 +212,7 @@ export function generateStreetMap(size: number, rand: Rng): StreetMap {
 
     while (positions.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const pos = positions.splice(rand.random(positions.length), 1)[0]!;
+        const pos = positions.splice(rng.random(positions.length), 1)[0]!;
         createStreet(pos, vertLength > horzLength);
     }
 
@@ -220,7 +224,7 @@ export function generateStreetMap(size: number, rand: Rng): StreetMap {
 
         const step = isHorz ? 1 : size;
         let length = 0;
-        let maxLength = 1 + rand.random(4);
+        let maxLength = 1 + rng.random(4);
         for (let pos = start; pos <= end; pos += step) {
             ++length;
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -231,14 +235,14 @@ export function generateStreetMap(size: number, rand: Rng): StreetMap {
             if (length === maxLength) {
                 borderMasks[pos] &= isHorz ? 1 : 2;
                 length = 0;
-                maxLength = 1 + rand.random(4);
+                maxLength = 1 + rng.random(4);
             }
         }
     });
 
-    return new StreetMap({
+    return {
         size,
         borderMasks,
         streets,
-    });
+    };
 }
