@@ -11,14 +11,14 @@ type BorderMask = ss.Infer<typeof borderMaskSchema>;
 
 const streetSchema = ss.object({
     orientation: ss.enums(['horz', 'vert']),
-    start: ss.number(),
-    end: ss.number(),
+    start: ss.integer(),
+    end: ss.integer(),
 });
 
 type Street = ss.Infer<typeof streetSchema>;
 
 export const streetMapDataSchema = ss.object({
-    size: ss.number(),
+    size: ss.integer(),
     borderMasks: ss.array(borderMaskSchema),
     streets: ss.array(streetSchema),
 });

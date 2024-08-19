@@ -1,7 +1,7 @@
 import ss from 'superstruct';
 
 export const buildingSchema = ss.object({
-    position: ss.number(),
+    position: ss.integer(),
     buildingName: ss.string(),
 });
 

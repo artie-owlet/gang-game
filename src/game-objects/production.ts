@@ -19,6 +19,8 @@ import { productionReceipeTypeSchema, type ProductionReceipe } from '../rules/pr
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { recordEntries, recordValue } from '../utils/record-utils';
+import type { EmptyBuilding } from './empty-building';
+import type { GameContext } from './game-context';
 
 export const productionIdSchema = defineFlavoredStringSchema('ProductionId');
 
@@ -28,7 +30,7 @@ const productionPrivateSchema = ss.object({
     id: productionIdSchema,
     type: productionTypeSchema,
     currentReceipeType: ss.nullable(productionReceipeTypeSchema),
-    countDown: ss.number(),
+    countDown: ss.integer(),
 });
 
 export const productionSchema = ss.intersection([
@@ -47,7 +49,21 @@ export class Production extends new GameObjectClassFactory(
     Manageable,
     BusinessUpgradeable<'ProductionType'>,
 ).create<ss.Infer<typeof productionSchema>>() {
-    // NOTE: Don't add Production.create() - Production can be created only by upgrading EmptyBuilding
+    public static create(type: ProductionType, building: EmptyBuilding, ctx: GameContext): Production {
+        const config = ctx.rules.productionConfig(type);
+        building.takeBuildingCost(config.buildingCost);
+        const production = new Production({
+            ...building,
+            id: <ProductionId>building.id,
+            type,
+            managerId: null,
+            upgradeCountDown: config.buildingCost.buildingTime,
+            currentReceipeType: null,
+            countDown: 0,
+        }, ctx);
+        ctx.buildProduction(production);
+        return production;
+    }
 
     public update(): void {
         if (this.isUnderConstruction) {

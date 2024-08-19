@@ -10,9 +10,9 @@ export function defineVehicleSchema<T extends string>(driverIdTypename: T) {
     return ss.object({
         type: vehicleTypeSchema,
         driverId: ss.nullable(defineFlavoredStringSchema(driverIdTypename)),
-        position: ss.number(),
+        position: ss.integer(),
         route: ss.array(directionSchema),
-        driven: ss.number(),
+        driven: ss.integer(),
     });
 }
 

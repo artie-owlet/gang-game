@@ -28,12 +28,14 @@ export class GangsterVehicle extends new GameObjectClassFactory(
     ResourceStorage,
 ).create<ss.Infer<typeof gangsterVehicleSchema>>() {
     public static create(type: VehicleType, position: number, ctx: GameContext): GangsterVehicle {
-        return new GangsterVehicle({
+        const vehicle = new GangsterVehicle({
             id: generateId(),
             ...Vehicle.create(type, position),
             ...ResourceStorage.create(ctx.rules.vehicleConfig(type).capacity),
             ...Wallet.create(),
         }, ctx);
+        ctx.addGangsterVehicle(vehicle);
+        return vehicle;
     }
 
     public get driver(): Gangster | null {

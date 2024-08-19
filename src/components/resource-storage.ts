@@ -11,7 +11,7 @@ const resourceStorageItemSchema = ss.object({
 export type ResourceStorageItem = ss.Infer<typeof resourceStorageItemSchema>;
 
 export const resourceStorageSchema = ss.object({
-    storageCapacity: ss.number(),
+    storageCapacity: ss.integer(),
     // FIXME: Replace with Map
     storageItems: ss.array(resourceStorageItemSchema),
 });

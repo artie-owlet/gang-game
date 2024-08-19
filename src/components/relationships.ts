@@ -2,6 +2,7 @@ import ss from 'superstruct';
 
 import { relsEventTypeSchema, type RelsEventType } from '../rules/relationships-config';
 import { updateComponent } from '../utils/game-object-class-factory';
+import { JsonMap } from '../utils/json-tools';
 import { recordValue } from '../utils/record-utils';
 import type { WithContext } from './with-context';
 
@@ -28,9 +29,9 @@ export function calcRelationshipsLimitCurve(r0: number, f0: number): number[] {
 }
 
 export const relationshipsSchema = ss.object({
-    respect: ss.number(),
-    fear: ss.number(),
-    relsEventsCountDown: ss.map(relsEventTypeSchema, ss.number()),
+    respect: ss.integer(),
+    fear: ss.integer(),
+    relsEventsCountDown: ss.map(relsEventTypeSchema, ss.integer()),
 });
 
 type RelationshipsData = ss.Infer<typeof relationshipsSchema>;
@@ -43,7 +44,7 @@ export abstract class Relationships {
         return {
             respect: 0,
             fear: 0,
-            relsEventsCountDown: new Map(),
+            relsEventsCountDown: new JsonMap(),
         };
     }
 

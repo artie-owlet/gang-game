@@ -28,11 +28,13 @@ export class Gangster extends new GameObjectClassFactory(
     WithContext,
 ).create<ss.Infer<typeof gangsterSchema>>() {
     public static create(ctx: GameContext): Gangster {
-        return new Gangster({
+        const gangster = new Gangster({
             id: generateId(),
             perks: new JsonMap<GangsterPerks, number>(),
             ...Person.create(ctx.randomizer),
         }, ctx);
+        ctx.addGangster(gangster);
+        return gangster;
     }
 
     public getPerkValue(perk: GangsterPerks): number {

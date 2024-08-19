@@ -13,6 +13,8 @@ import { GangsterPerks } from '../rules/gangster-perks-config';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { recordEntries } from '../utils/record-utils';
+import type { EmptyBuilding } from './empty-building';
+import type { GameContext } from './game-context';
 
 export const barIdSchema = defineFlavoredStringSchema('BarId');
 
@@ -39,7 +41,19 @@ export class Bar extends new GameObjectClassFactory(
     Manageable,
     BusinessUpgradeable<'BarType'>,
 ).create<ss.Infer<typeof barSchema>>() {
-    // NOTE: Don't add Bar.create() - Bar can be created only by upgrading EmptyBuilding
+    public static create(type: BarType, building: EmptyBuilding, ctx: GameContext): Bar {
+        const config = ctx.rules.barConfig(type);
+        building.takeBuildingCost(config.buildingCost);
+        const bar = new Bar({
+            ...building,
+            id: <BarId>building.id,
+            type,
+            managerId: null,
+            upgradeCountDown: config.buildingCost.buildingTime,
+        }, ctx);
+        ctx.buildBar(bar);
+        return bar;
+    }
 
     public update(): void {
         if (this.isUnderConstruction) {

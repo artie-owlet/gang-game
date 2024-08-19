@@ -6,15 +6,16 @@ import { resourceTypeSchema, type ResourceType } from '../rules/resource-config'
 import type { TraderType } from '../rules/trader-config';
 import { createCompMemberClass } from '../utils/create-comp-member-class';
 import { initComponent, updateComponent } from '../utils/game-object-class-factory';
+import { JsonMap } from '../utils/json-tools';
 import { randomBool, randomFromSet } from '../utils/random';
 import { recordEntries } from '../utils/record-utils';
 
 const tradingItemDataSchema = ss.object({
     maxAmount: ss.number(),
-    updateInterval: ss.number(),
+    updateInterval: ss.integer(),
     updateAmount: ss.number(),
     amount: ss.number(),
-    updateCountDown: ss.number(),
+    updateCountDown: ss.integer(),
 });
 
 type TradingItemData = ss.Infer<typeof tradingItemDataSchema>;
@@ -72,7 +73,7 @@ function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext
                 updateCountDown: updateInterval,
             }));
             return items;
-        }, new Map<ResourceType, TradingItem>());
+        }, new JsonMap<ResourceType, TradingItem>());
 }
 
 export interface Trader extends TraderData {
@@ -84,8 +85,8 @@ export abstract class Trader {
     public static create(...args: [TraderType, GameContext] | []): TraderData {
         if (args.length === 0) {
             return {
-                buyableTradingItems: new Map(),
-                saleableTradingItems: new Map(),
+                buyableTradingItems: new JsonMap(),
+                saleableTradingItems: new JsonMap(),
             };
         }
 

@@ -95,7 +95,13 @@ export default tseslint.config(
                     allowAllPropertiesOnSameLine: true,
                 },
             ],
-            '@stylistic/quotes': ['error', 'single'],
+            '@stylistic/quotes': [
+                'error',
+                'single',
+                {
+                    avoidEscape: true,
+                },
+            ],
             '@stylistic/quote-props': ['error', 'as-needed'],
             '@stylistic/padded-blocks': ['error', 'never'],
             '@stylistic/space-before-function-paren': ['error', 'never'],
@@ -119,6 +125,13 @@ export default tseslint.config(
 
             'no-console': 'error',
             'no-duplicate-imports': 'error',
+            'no-restricted-syntax': [
+                'error',
+                {
+                    selector: 'NewExpression[callee.name="Map"]',
+                    message: 'Use "JsonMap" instead',
+                },
+            ],
         },
     },
     {

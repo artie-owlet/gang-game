@@ -7,8 +7,8 @@ export const vehicleTypeSchema = defineFlavoredStringSchema('VehicleType');
 export type VehicleType = ss.Infer<typeof vehicleTypeSchema>;
 
 const vehicleConfigSchema = ss.object({
-    capacity: ss.number(),
-    drivePoints: ss.number(),
+    capacity: ss.integer(),
+    drivePoints: ss.integer(),
 });
 
 export type VehicleConfig = ss.Infer<typeof vehicleConfigSchema>;

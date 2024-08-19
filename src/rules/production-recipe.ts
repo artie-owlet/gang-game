@@ -11,7 +11,7 @@ export const productionReceipeSchema = ss.object({
     product: resourceTypeSchema,
     amount: ss.number(),
     inputsAmount: ss.record(resourceTypeSchema, ss.number()),
-    time: ss.number(),
+    time: ss.integer(),
 });
 
 export type ProductionReceipe = ss.Infer<typeof productionReceipeSchema>;

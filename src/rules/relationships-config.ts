@@ -9,9 +9,9 @@ export type RelsEventType = ss.Infer<typeof relsEventTypeSchema>;
 export const relationshipsConfigSchema = ss.record(
     relsEventTypeSchema,
     ss.object({
-        respect: ss.number(),
-        fear: ss.number(),
-        time: ss.number(),
+        respect: ss.integer(),
+        fear: ss.integer(),
+        time: ss.integer(),
     }),
 );
 

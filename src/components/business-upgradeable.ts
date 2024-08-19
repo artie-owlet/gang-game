@@ -10,7 +10,7 @@ import type { Wallet } from './wallet';
 export function defineBusinessUpgradeableSchema<T extends string>(businessTypeTypename: T) {
     return ss.object({
         type: defineFlavoredStringSchema(businessTypeTypename),
-        upgradeCountDown: ss.number(),
+        upgradeCountDown: ss.integer(),
     });
 }
 
