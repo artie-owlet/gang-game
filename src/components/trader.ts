@@ -4,13 +4,12 @@ import type { Odds } from '../common-type-schemas/odds-schema';
 import type { GameContext } from '../game-objects/game-context';
 import { resourceTypeSchema, type ResourceType } from '../rules/resource-config';
 import type { TraderType } from '../rules/trader-config';
-import { createCompMemberClass } from '../utils/create-comp-member-class';
-import { initComponent, updateComponent } from '../utils/game-object-class-factory';
+import { updateComponent } from '../utils/game-object-class-factory';
 import { JsonMap } from '../utils/json-tools';
 import { randomBool, randomFromSet } from '../utils/random';
 import { recordEntries } from '../utils/record-utils';
 
-const tradingItemDataSchema = ss.object({
+const tradingItemSchema = ss.object({
     maxAmount: ss.number(),
     updateInterval: ss.integer(),
     updateAmount: ss.number(),
@@ -18,44 +17,7 @@ const tradingItemDataSchema = ss.object({
     updateCountDown: ss.integer(),
 });
 
-type TradingItemData = ss.Infer<typeof tradingItemDataSchema>;
-
-export interface TradingItem extends TradingItemData {
-}
-
-export class TradingItem extends createCompMemberClass<TradingItemData>() {
-    public trade(amount: number): void {
-        if (amount > this.amount) {
-            throw new Error('Cannot trade item: too much amount');
-        }
-        this.amount -= amount;
-    }
-
-    public update(): void {
-        --this.updateCountDown;
-        if (this.updateCountDown > 0) {
-            return;
-        }
-
-        this.updateCountDown = this.updateInterval;
-        this.amount += this.updateAmount;
-        if (this.amount > this.maxAmount) {
-            this.amount = this.maxAmount;
-        }
-    }
-}
-
-const tradingItemSchema = ss.define<TradingItem>('TradingItem', (value) => {
-    const [err] = ss.validate(value, tradingItemDataSchema);
-    return err ? err.failures() : true;
-});
-
-export const traderSchema = ss.object({
-    buyableTradingItems: ss.map(resourceTypeSchema, tradingItemSchema),
-    saleableTradingItems: ss.map(resourceTypeSchema, tradingItemSchema),
-});
-
-type TraderData = ss.Infer<typeof traderSchema>;
+type TradingItem = ss.Infer<typeof tradingItemSchema>;
 
 function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext): Map<ResourceType, TradingItem> {
     return recordEntries(config).filter(([, odds]) => randomBool(odds, ctx.randomizer.rng)).
@@ -65,16 +27,23 @@ function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext
             const updateInterval = randomFromSet(tradingItem.updateInterval, ctx.randomizer.rng);
             const updateAmount = randomFromSet(tradingItem.updateAmount, ctx.randomizer.rng);
 
-            items.set(resourceType, new TradingItem({
+            items.set(resourceType, {
                 maxAmount,
                 updateInterval,
                 updateAmount,
                 amount: maxAmount,
                 updateCountDown: updateInterval,
-            }));
+            });
             return items;
         }, new JsonMap<ResourceType, TradingItem>());
 }
+
+export const traderSchema = ss.object({
+    buyableTradingItems: ss.map(resourceTypeSchema, tradingItemSchema),
+    saleableTradingItems: ss.map(resourceTypeSchema, tradingItemSchema),
+});
+
+type TraderData = ss.Infer<typeof traderSchema>;
 
 export interface Trader extends TraderData {
 }
@@ -98,11 +67,6 @@ export abstract class Trader {
         };
     }
 
-    public [initComponent]() {
-        this.buyableTradingItems.forEach((item, key) => this.buyableTradingItems.set(key, new TradingItem(item)));
-        this.saleableTradingItems.forEach((item, key) => this.saleableTradingItems.set(key, new TradingItem(item)));
-    }
-
     public get isTrader(): boolean {
         return this.buyableTradingItems.size > 0 || this.saleableTradingItems.size > 0;
     }
@@ -112,11 +76,22 @@ export abstract class Trader {
         if (!item) {
             throw new Error('Cannot trade: no such resource type');
         }
-        item.trade(amount);
+        if (amount > item.amount) {
+            throw new Error('Cannot trade item: too much amount');
+        }
+        item.amount -= amount;
     }
 
     public [updateComponent](): void {
-        this.buyableTradingItems.forEach((item) => item.update());
-        this.saleableTradingItems.forEach((item) => item.update());
+        for (const item of [...this.buyableTradingItems.values(), ...this.saleableTradingItems.values()]) {
+            --item.updateCountDown;
+            if (item.updateCountDown === 0) {
+                item.updateCountDown = item.updateInterval;
+                item.amount += item.updateAmount;
+                if (item.amount > item.maxAmount) {
+                    item.amount = item.maxAmount;
+                }
+            }
+        }
     }
 }

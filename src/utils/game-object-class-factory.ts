@@ -21,7 +21,7 @@ type GameObjectType<D, C extends Ctor[]> = HasContext<InstanceTypeArray<C>> exte
         D & Intersection<InstanceTypeArray<C>> & { updateComponents(): void }
 );
 
-export const initComponent = Symbol('initComponent');
+// export const initComponent = Symbol('initComponent');
 export const updateComponent = Symbol('updateComponent');
 
 export class GameObjectClassFactory<C extends Ctor[]> {
@@ -33,13 +33,13 @@ export class GameObjectClassFactory<C extends Ctor[]> {
 
     public create<D>(): GameObjectType<D, C> {
         abstract class Base {
-            public static initializableComponents: string[] = [];
+            // public static initializableComponents: string[] = [];
             public static updateableComponents: string[] = [];
 
             public constructor(data: D, public ctx: unknown) {
                 Object.assign(this, data);
 
-                this.initComponents();
+                // this.initComponents();
             }
 
             public updateComponents(): void {
@@ -51,14 +51,14 @@ export class GameObjectClassFactory<C extends Ctor[]> {
                 });
             }
 
-            private initComponents(): void {
-                Base.updateableComponents.forEach((name) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                    this[`init${name}`]();
-                });
-            }
+            // private initComponents(): void {
+            //     Base.updateableComponents.forEach((name) => {
+            //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //         // @ts-ignore
+            //         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+            //         this[`init${name}`]();
+            //     });
+            // }
         }
 
         this.Comps.forEach((Comp) => {
@@ -70,11 +70,11 @@ export class GameObjectClassFactory<C extends Ctor[]> {
                 }
             }
 
-            const init = Object.getOwnPropertyDescriptor(Comp.prototype, updateComponent);
-            if (init) {
-                Base.initializableComponents.push(Comp.name);
-                Object.defineProperty(Base.prototype, `init${Comp.name}`, init);
-            }
+            // const init = Object.getOwnPropertyDescriptor(Comp.prototype, updateComponent);
+            // if (init) {
+            //     Base.initializableComponents.push(Comp.name);
+            //     Object.defineProperty(Base.prototype, `init${Comp.name}`, init);
+            // }
 
             const update = Object.getOwnPropertyDescriptor(Comp.prototype, updateComponent);
             if (update) {
