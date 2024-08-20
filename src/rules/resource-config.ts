@@ -11,7 +11,7 @@ const resourceConfigSchema = ss.object({
     price: ss.number(),
     size: ss.number(),
     legal: ss.boolean(),
-    tradeItem: ss.object({
+    tradingItem: ss.object({
         maxAmount: weightedSetSchema,
         updateInterval: weightedSetSchema,
         updateAmount: weightedSetSchema,

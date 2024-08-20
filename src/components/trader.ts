@@ -60,10 +60,10 @@ type TraderData = ss.Infer<typeof traderSchema>;
 function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext): Map<ResourceType, TradingItem> {
     return recordEntries(config).filter(([, odds]) => randomBool(odds, ctx.randomizer.rng)).
         reduce((items, [resourceType]) => {
-            const { tradeItem } = ctx.rules.resourceConfig(resourceType);
-            const maxAmount = randomFromSet(tradeItem.maxAmount, ctx.randomizer.rng);
-            const updateInterval = randomFromSet(tradeItem.updateInterval, ctx.randomizer.rng);
-            const updateAmount = randomFromSet(tradeItem.updateAmount, ctx.randomizer.rng);
+            const { tradingItem } = ctx.rules.resourceConfig(resourceType);
+            const maxAmount = randomFromSet(tradingItem.maxAmount, ctx.randomizer.rng);
+            const updateInterval = randomFromSet(tradingItem.updateInterval, ctx.randomizer.rng);
+            const updateAmount = randomFromSet(tradingItem.updateAmount, ctx.randomizer.rng);
 
             items.set(resourceType, new TradingItem({
                 maxAmount,
