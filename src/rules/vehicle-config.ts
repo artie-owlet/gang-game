@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { weightedSetSchema } from '../common-type-schemas/weighted-set';
+import { weightedNumberSetSchema } from '../common-type-schemas/weighted-set';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 
 export const vehicleTypeSchema = defineFlavoredStringSchema('VehicleType');
@@ -13,9 +13,9 @@ const vehicleConfigSchema = ss.object({
     buyPrice: ss.number(),
     salePrice: ss.number(),
     dealership: ss.object({
-        maxNumber: weightedSetSchema,
-        updateInterval: weightedSetSchema,
-        updateNumber: weightedSetSchema,
+        maxNumber: weightedNumberSetSchema,
+        updateInterval: weightedNumberSetSchema,
+        updateNumber: weightedNumberSetSchema,
     }),
 });
 

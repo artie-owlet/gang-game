@@ -1,6 +1,6 @@
 import ss from 'superstruct';
 
-import { weightedSetSchema } from '../common-type-schemas/weighted-set';
+import { weightedNumberSetSchema } from '../common-type-schemas/weighted-set';
 import { defineFlavoredStringSchema } from '../utils/flavored-string';
 
 export const resourceTypeSchema = defineFlavoredStringSchema('ResourceType');
@@ -12,9 +12,9 @@ const resourceConfigSchema = ss.object({
     size: ss.number(),
     legal: ss.boolean(),
     tradingItem: ss.object({
-        maxAmount: weightedSetSchema,
-        updateInterval: weightedSetSchema,
-        updateAmount: weightedSetSchema,
+        maxAmount: weightedNumberSetSchema,
+        updateInterval: weightedNumberSetSchema,
+        updateAmount: weightedNumberSetSchema,
     }),
 });
 
