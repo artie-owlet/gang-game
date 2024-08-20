@@ -1,4 +1,5 @@
 import type { GenderType, PhotoId } from '../components/person';
+import type { AutoDealerConfig, AutoDealerType } from '../rules/auto-dealer-config';
 import type { BarConfig, BarType } from '../rules/bar-config';
 import type { GangsterPerksConfig } from '../rules/gangster-perks-config';
 import type { GeneralConfig } from '../rules/general-config';
@@ -29,6 +30,9 @@ export interface Rules {
     gangsterPerksConfig: Readonly<GangsterPerksConfig>;
     relationshipsConfig: Readonly<RelationshipsConfig>;
     relationshipsLimitCurve: readonly number[];
+
+    autoDealerConfigs: Record<AutoDealerType, Readonly<AutoDealerConfig>>;
+    autoDealerConfig(autoDealerType: AutoDealerType): Readonly<AutoDealerConfig>;
 
     barConfigs: Record<BarType, Readonly<BarConfig>>;
     barConfig(barType: BarType): Readonly<BarConfig>;

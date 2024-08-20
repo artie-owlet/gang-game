@@ -1,7 +1,11 @@
 import ss from 'superstruct';
 
+import type { GameContext } from '../game-objects/game-context';
+import type { AutoDealerType } from '../rules/auto-dealer-config';
 import { vehicleTypeSchema, type VehicleType } from '../rules/vehicle-config';
 import { updateComponent } from '../utils/game-object-class-factory';
+import { JsonMap } from '../utils/json-tools';
+import { randomFromSet } from '../utils/random';
 
 const vehicleItemSchema = ss.object({
     maxNumber: ss.integer(),
@@ -10,6 +14,8 @@ const vehicleItemSchema = ss.object({
     number: ss.integer(),
     updateCountDown: ss.integer(),
 });
+
+type VehicleItem = ss.Infer<typeof vehicleItemSchema>;
 
 export const autoDealerSchema = ss.object({
     vehicleItems: ss.map(vehicleTypeSchema, vehicleItemSchema),
@@ -22,6 +28,38 @@ export interface AutoDealer extends AutoDealerData {
 }
 
 export abstract class AutoDealer {
+    public static create(autoDealerType: AutoDealerType, ctx: GameContext): AutoDealerData;
+    public static create(): AutoDealerData;
+    public static create(...args: [AutoDealerType, GameContext] | []): AutoDealerData {
+        if (args.length === 0) {
+            return {
+                vehicleItems: new JsonMap(),
+                canSellVehicle: false,
+            };
+        }
+
+        const [autoDealerType, ctx] = args;
+        const config = ctx.rules.autoDealerConfig(autoDealerType);
+        return {
+            vehicleItems: config.vehicleTypes.reduce((items, vehicleType) => {
+                const { dealership } = ctx.rules.vehicleConfig(vehicleType);
+                const maxNumber = randomFromSet(dealership.maxNumber, ctx.randomizer.rng);
+                const updateInterval = randomFromSet(dealership.updateInterval, ctx.randomizer.rng);
+                const updateNumber = randomFromSet(dealership.updateNumber, ctx.randomizer.rng);
+
+                items.set(vehicleType, {
+                    maxNumber,
+                    updateInterval,
+                    updateNumber,
+                    number: maxNumber,
+                    updateCountDown: updateInterval,
+                });
+                return items;
+            }, new JsonMap<VehicleType, VehicleItem>()),
+            canSellVehicle: config.canSellVehicle,
+        };
+    }
+
     public get isAutoDealer(): boolean {
         return this.vehicleItems.size > 0 || this.canSellVehicle;
     }
