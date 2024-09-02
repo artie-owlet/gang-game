@@ -3,7 +3,6 @@ import ss from 'superstruct';
 import { businessUpgradeCost, type BusinessUpgrade } from '../rules/business-upgrade';
 import { defineFlavoredStringSchema, type FlavoredString } from '../utils/flavored-string';
 import { updateComponent } from '../utils/game-object-class-factory';
-import type { Building } from './building';
 import type { ResourceStorage } from './resource-storage';
 import type { Wallet } from './wallet';
 
@@ -17,7 +16,7 @@ export function defineBusinessUpgradeableSchema<T extends string>(businessTypeTy
 type BusinessUpgradeableData<T extends string> = ss.Infer<ReturnType<typeof defineBusinessUpgradeableSchema<T>>>;
 
 export interface BusinessUpgradeable<T extends string> extends
-    BusinessUpgradeableData<T>, Building, ResourceStorage, Wallet {
+    BusinessUpgradeableData<T>, ResourceStorage, Wallet {
 }
 
 export abstract class BusinessUpgradeable<T extends string> {
@@ -25,7 +24,7 @@ export abstract class BusinessUpgradeable<T extends string> {
         return this.upgradeCountDown > 0;
     }
 
-    public canUpgradeBuilding(toType: FlavoredString<T>): boolean {
+    public canUpgradeBusiness(toType: FlavoredString<T>): boolean {
         const current = this.getBusinessUpgrade(this.type);
         if (!current.upgrades.includes(toType)) {
             return false;
@@ -45,7 +44,7 @@ export abstract class BusinessUpgradeable<T extends string> {
     }
 
     public upgradeBusiness(toType: FlavoredString<T>): void {
-        if (!this.canUpgradeBuilding(toType)) {
+        if (!this.canUpgradeBusiness(toType)) {
             throw new Error(`Cannot upgrade building to type ${toType}`);
         }
 
