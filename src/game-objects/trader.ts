@@ -1,12 +1,16 @@
 import ss from 'superstruct';
 
 import type { Odds } from '../common-type-schemas/odds-schema';
+import { Building, buildingSchema } from '../components/building';
+import { Person, personSchema } from '../components/person';
+import { Relationships, relationshipsSchema } from '../components/relationships';
 import type { GameContext } from '../game-objects/game-context';
 import { resourceTypeSchema, type ResourceType } from '../rules/resource-config';
 import type { TraderType } from '../rules/trader-config';
-import { updateComponent } from '../utils/game-object-class-factory';
+import { defineFlavoredStringSchema } from '../utils/flavored-string';
+import { GameObjectClassFactory } from '../utils/game-object-class-factory';
 import { JsonMap } from '../utils/json-tools';
-import { randomBool, randomFromSet } from '../utils/random';
+import { generateId, randomBool, randomFromSet } from '../utils/random';
 import { recordEntries } from '../utils/record-utils';
 
 const tradingItemSchema = ss.object({
@@ -19,7 +23,7 @@ const tradingItemSchema = ss.object({
 
 type TradingItem = ss.Infer<typeof tradingItemSchema>;
 
-function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext): Map<ResourceType, TradingItem> {
+function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext): JsonMap<ResourceType, TradingItem> {
     return recordEntries(config).filter(([, odds]) => randomBool(odds, ctx.randomizer.rng)).
         reduce((items, [resourceType]) => {
             const { tradingItem } = ctx.rules.resourceConfig(resourceType);
@@ -38,37 +42,38 @@ function createTradingItems(config: Record<ResourceType, Odds>, ctx: GameContext
         }, new JsonMap<ResourceType, TradingItem>());
 }
 
-export const traderSchema = ss.object({
+export const traderIdSchema = defineFlavoredStringSchema('TraderId');
+
+export type TraderId = ss.Infer<typeof traderIdSchema>;
+
+export const traderPrivateSchema = ss.object({
+    id: traderIdSchema,
     buyableTradingItems: ss.map(resourceTypeSchema, tradingItemSchema),
     saleableTradingItems: ss.map(resourceTypeSchema, tradingItemSchema),
 });
 
-type TraderData = ss.Infer<typeof traderSchema>;
+export const traderSchema = ss.intersection([
+    traderPrivateSchema,
+    buildingSchema,
+    personSchema,
+    relationshipsSchema,
+]);
 
-export interface Trader extends TraderData {
-}
-
-export abstract class Trader {
-    public static create(traderType: TraderType, ctx: GameContext): TraderData;
-    public static create(): TraderData;
-    public static create(...args: [TraderType, GameContext] | []): TraderData {
-        if (args.length === 0) {
-            return {
-                buyableTradingItems: new JsonMap(),
-                saleableTradingItems: new JsonMap(),
-            };
-        }
-
-        const [traderType, ctx] = args;
+export class Trader extends new GameObjectClassFactory(
+    Building,
+    Person,
+    Relationships,
+).create<ss.Infer<typeof traderSchema>>() {
+    public static create(traderType: TraderType, position: number, ctx: GameContext): Trader {
         const config = ctx.rules.traderConfig(traderType);
-        return {
+        return new Trader({
+            id: generateId(),
             buyableTradingItems: createTradingItems(config.buyableResources, ctx),
             saleableTradingItems: createTradingItems(config.saleableResources, ctx),
-        };
-    }
-
-    public get isTrader(): boolean {
-        return this.buyableTradingItems.size > 0 || this.saleableTradingItems.size > 0;
+            position,
+            ...Person.create(ctx.randomizer),
+            ...Relationships.create(),
+        }, ctx);
     }
 
     public trade(operation: 'buy' | 'sell', resourceType: ResourceType, amount: number): void {
@@ -82,7 +87,7 @@ export abstract class Trader {
         item.amount -= amount;
     }
 
-    public [updateComponent](): void {
+    public update(): void {
         for (const item of [...this.buyableTradingItems.values(), ...this.saleableTradingItems.values()]) {
             --item.updateCountDown;
             if (item.updateCountDown === 0) {

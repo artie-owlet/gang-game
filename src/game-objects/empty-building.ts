@@ -32,7 +32,7 @@ export class EmptyBuilding extends new GameObjectClassFactory(
     public static create(position: number, capacity: number, ctx: GameContext): EmptyBuilding {
         const building = new EmptyBuilding({
             id: generateId(),
-            ...Building.create(position, ctx.randomizer.buildingName()),
+            position,
             ...ResourceStorage.create(capacity),
             ...Wallet.create(),
         }, ctx);
